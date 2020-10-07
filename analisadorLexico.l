@@ -13,7 +13,7 @@
 "sint"				return sint;
 "occaecat"			return occaecat;
 "cupidatat"			return cupidatat;
-[ \t\n]				return 100;
+[ \t\n]				;
 .					return 101;
 %%
 

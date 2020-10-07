@@ -1,9 +1,9 @@
 CC=gcc
-DEPS=classLexica.h
+DEPS=classLexica.h teste
 
-hellomake:  analisadorLexico.o analisadorLexico.l
+hellomake:  analisadorLexico.c analisadorLexico.l $(DEPS)
 	lex analisadorLexico.l
-	$(CC) analisadorLexico.o lex.yy.c -o saida
+	$(CC) analisadorLexico.c lex.yy.c -o saida
 
 run:
 	./saida <teste

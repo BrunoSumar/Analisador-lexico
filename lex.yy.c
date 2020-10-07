@@ -817,7 +817,7 @@ case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
 #line 16 "analisadorLexico.l"
-return 100;
+;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
