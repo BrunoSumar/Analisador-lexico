@@ -13,7 +13,8 @@
 "sint"				return sint;
 "occaecat"			return occaecat;
 "cupidatat"			return cupidatat;
-(.)+					return 100;
+[ \t\n]				return 100;
+.					return 101;
 %%
 
 int yywrap(void)
