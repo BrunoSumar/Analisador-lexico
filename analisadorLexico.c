@@ -24,7 +24,7 @@ int main(void){
     int tokenId = 0;
 
     tokenId = yylex();
-    printf("inicio analise\n\n");
+    printf(" inicio analise\n\n"); 
     while(tokenId){
         temp = (Token*) calloc(1, sizeof(Token));
         temp->id = tokenId;

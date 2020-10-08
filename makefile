@@ -1,11 +1,13 @@
 CC=gcc
 DEPS=classLexica.h teste
 
-hellomake:  analisadorLexico.c analisadorLexico.l $(DEPS)
-	lex analisadorLexico.l
-	$(CC) analisadorLexico.c lex.yy.c -o saida
+comp:  analisadorLexico.c  lex.yy.c
+	$(CC) $^ -o saida
+
+.l.c: %.l $(DEPS)
+	flex $<
 
 run:
 	./saida <teste
 
-.PHONY: run
+.PHONY: run comp
