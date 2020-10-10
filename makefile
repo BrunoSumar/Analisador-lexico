@@ -1,5 +1,5 @@
 CC=gcc
-DEPS=classLexica.h teste
+DEPS=classLexica.h
 
 comp:  analisadorLexico.c  lex.yy.c
 	$(CC) $^ -o saida
