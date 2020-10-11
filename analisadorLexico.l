@@ -2,7 +2,7 @@
 %{
 #include "classLexica.h"
 %}
-%option nounput yylineno
+%option yylineno
 
 %%
 program					{return 1;} 	//Palavra reservada
@@ -14,7 +14,7 @@ type					{return 1;} 	//Palavra reservada
 var						{return 1;} 	//Palavra reservada
 \"[^\"\n]*\"			|				//XXXXXXXXXXXXXXXXXXXXXXxRevisar depois
 \“[^\”\n]*\”			{return 1;} 	//String
-[0-9]+[\.]?[0-9]+		{return 7;} 	//Número
+[0-9]+([\.][0-9]*)?		{return 7;} 	//Número
 :						{return 1;} 	//Ponto e vírgula
 integer					{return 1;} 	//Palavra reservada; tipo de dado
 real					{return 1;} 	//Palavra reservada; tipo de dado
@@ -45,7 +45,7 @@ else					{return 1;} 	//Palavra reservada
 [a-zA-Z]+[a-zA-Z0-9]*	{return 1;} 	//Identificador
 
 [ \t\n]					;				//Espaço, tabulação e quebra de linha(ignorados)
-.						{return 101;} 	//o que sobrar
+.						{return ERRO;} 	//carácter inesperado
 %%
 
 int yywrap(void)

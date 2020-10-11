@@ -382,10 +382,10 @@ struct yy_trans_info
 static const flex_int16_t yy_accept[115] =
     {   0,
         0,    0,   42,   40,   39,   39,   33,   40,   24,   25,
-       36,   34,   26,   35,   27,   37,   40,   11,    2,   31,
+       36,   34,   26,   35,   27,   37,   10,   11,    2,   31,
        32,   30,   38,   28,   29,   38,   38,   38,   38,   38,
        38,   38,   38,   38,   38,   38,   38,   40,    0,    8,
-        0,   10,   18,   38,   38,   38,   38,   38,   38,   38,
+       10,   10,   18,   38,   38,   38,   38,   38,   38,   38,
        38,   20,   38,   15,   38,   38,   38,   38,   38,   38,
        38,    0,   10,   38,   38,   38,   38,    4,   38,   38,
        38,   38,   38,   38,   38,    7,   38,   38,    0,   38,
@@ -621,6 +621,8 @@ extern int yywrap ( void );
 
 #ifndef YY_NO_UNPUT
     
+    static void yyunput ( int c, char *buf_ptr  );
+    
 #endif
 
 #ifndef yytext_ptr
@@ -777,7 +779,7 @@ YY_DECL
 	{
 #line 7 "analisadorLexico.l"
 
-#line 781 "lex.yy.c"
+#line 783 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1025,14 +1027,14 @@ YY_RULE_SETUP
 case 40:
 YY_RULE_SETUP
 #line 48 "analisadorLexico.l"
-{return 101;} 	//o que sobrar
+{return ERRO;} 	//carácter inesperado
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 49 "analisadorLexico.l"
 ECHO;
 	YY_BREAK
-#line 1036 "lex.yy.c"
+#line 1038 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1367,6 +1369,47 @@ static int yy_get_next_buffer (void)
 }
 
 #ifndef YY_NO_UNPUT
+
+    static void yyunput (int c, char * yy_bp )
+{
+	char *yy_cp;
+    
+    yy_cp = (yy_c_buf_p);
+
+	/* undo effects of setting up yytext */
+	*yy_cp = (yy_hold_char);
+
+	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
+		{ /* need to shift things up to make room */
+		/* +2 for EOB chars. */
+		int number_to_move = (yy_n_chars) + 2;
+		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
+					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
+		char *source =
+				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
+
+		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
+			*--dest = *--source;
+
+		yy_cp += (int) (dest - source);
+		yy_bp += (int) (dest - source);
+		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
+			(yy_n_chars) = (int) YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
+
+		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
+			YY_FATAL_ERROR( "flex scanner push-back overflow" );
+		}
+
+	*--yy_cp = (char) c;
+
+    if ( c == '\n' ){
+        --yylineno;
+    }
+
+	(yytext_ptr) = yy_bp;
+	(yy_hold_char) = *yy_cp;
+	(yy_c_buf_p) = yy_cp;
+}
 
 #endif
 

@@ -16,17 +16,18 @@ typedef struct token{
 
 typedef struct erro{
     struct token* tk;
+    int lineno;
     struct erro* next;
 }Erro;
 
 int main(void){
 
     Token *tokenIni = NULL, *tokenFin = NULL, *temp = NULL;
-    Erro* erros = NULL;
+    Erro *erroIni = NULL, *erroFin = NULL, *erroAux = NULL;
     int tokenId = 0;
     char *text=NULL;
 
-    printf("Inicio analise\n");
+    printf("\nInicio analise léxica\n");
     tokenId = yylex();
     while(tokenId){
         temp = (Token*) calloc(1, sizeof(Token));
@@ -42,23 +43,51 @@ int main(void){
             tokenFin->next = temp;
             tokenFin = temp;
         }
+        if(tokenId==ERRO){
+            erroAux = (Erro*) calloc(1, sizeof(Erro));
+            erroAux->tk = temp;
+            erroAux->lineno = yylineno;
+            erroAux->next = NULL;
+            if(!erroIni){
+                erroIni = erroAux;
+                erroFin = erroAux;
+            }else{
+                erroFin->next = erroAux;
+                erroFin = erroAux;
+            }
+        }
         tokenId = yylex();
     }
-    printf("\nfim analise\n");
+    printf("\nfim analise\n\n");
 
     //imprime a lista de tokens
+    printf("Tokens encontrados:\n");
     temp = tokenIni;
     while(temp){
         printf("%d:  [%s]\n", temp->id, temp->str);
         temp = temp->next;
+    }
+    //imprime lista de erros
+    printf("%s\n", erroIni?"Erros encontrados:":"Nenhum erro léxico encontrado.");
+    erroAux = erroIni;
+    while(erroAux){
+        printf("ERRO: [%s] linha: %d\n", erroAux->tk->str, erroAux->lineno);
+        erroAux = erroAux->next;
     }
 
     //Libera as variaveis alocadas
     temp = tokenIni;
     while(temp){
         temp=tokenIni->next;
+        free(tokenIni->str);
         free(tokenIni);
         tokenIni = temp;
+    }
+    erroAux = erroIni;
+    while(erroAux){
+        erroAux = erroIni->next;
+        free(erroIni);
+        erroIni = erroAux;
     }
 
     return 0;

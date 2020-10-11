@@ -5,7 +5,6 @@ vetor = array[15] of integer;
 aluno = record
 nota1, nota2 : real;
 end;
-123232\123
 var
 A, B, C, D : integer;
 E : vetor;
@@ -59,4 +58,3 @@ C := exp(A,B);
 D := maior(E);
 F := lerDados();
 end
- " asdasd "
