@@ -27,9 +27,10 @@ int main(void){
     int tokenId = 0;
     char *text=NULL;
 
-    printf("\nInicio analise léxica\n");
+    printf("\nInicio analise lexica\n");
     tokenId = yylex();
     while(tokenId){
+        // Gera token
         temp = (Token*) calloc(1, sizeof(Token));
         temp->id = tokenId;
         text = (char*) calloc(yyleng, sizeof(char));
@@ -43,6 +44,7 @@ int main(void){
             tokenFin->next = temp;
             tokenFin = temp;
         }
+        // Se token não puder ser classificado ele é adicionado a lista de erros
         if(tokenId==ERRO){
             erroAux = (Erro*) calloc(1, sizeof(Erro));
             erroAux->tk = temp;
@@ -56,9 +58,10 @@ int main(void){
                 erroFin = erroAux;
             }
         }
+        // Procura o token seguinte
         tokenId = yylex();
     }
-    printf("\nfim analise\n\n");
+    printf("\nFim analise\n\n");
 
     //imprime a lista de tokens
     printf("Tokens encontrados:\n");
