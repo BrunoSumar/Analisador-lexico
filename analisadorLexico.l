@@ -5,47 +5,48 @@
 %option yylineno
 
 %%
-program					{return 1;} 	//Palavra reservada
-";"						{return 1;} 	//ponto e virgula
-begin					{return 1;} 	//Palavra reservada
-end						{return 1;} 	//Palavra reservada
-const					{return 1;} 	//Palavra reservada
-type					{return 1;} 	//Palavra reservada
-var						{return 1;} 	//Palavra reservada
-\"[^\"\n]*\"			|				//XXXXXXXXXXXXXXXXXXXXXXxRevisar depois
-\“[^\”\n]*\”			{return 1;} 	//String
-[0-9]+([\.][0-9]*)?		{return 7;} 	//Número
-:						{return 1;} 	//Ponto e vírgula
-integer					{return 1;} 	//Palavra reservada; tipo de dado
-real					{return 1;} 	//Palavra reservada; tipo de dado
-array					{return 1;} 	//Palavra reservada; tipo de dado
-of						{return 1;} 	//Palavra reservada
-record					{return 1;} 	//Palavra reservada; tipo de dado
-function				{return 1;} 	//Palavra reservada
-:=						{return 1;} 	//Atribuição
-while					{return 1;} 	//Palavra reservada
-if						{return 1;} 	//Palavra reservada
-then					{return 1;} 	//Palavra reservada
-write					{return 1;} 	//Palavra reservada
-else					{return 1;} 	//Palavra reservada
-"("						{return 1;} 	//Abre parenteses
-")"						{return 1;} 	//Fecha parenteses
-,						{return 1;} 	//Vírgula
-"."						{return 1;} 	//Ponto
-"["						{return 1;} 	//Abre colchetes
-"]"						{return 1;} 	//Fecha colchetes
+program					{return PROGRAM;} 	//Palavra reservada
+";"						{return PONTO_E_VIRGULA;} 	//ponto e virgula
+begin					{return BEGIN_;} 	//Palavra reservada
+end						{return END;} 	//Palavra reservada
+const					{return CONST;} 	//Palavra reservada
+type					{return TYPE;} 	//Palavra reservada
+var						{return VAR;} 	//Palavra reservada
+\"[^\"\n]*\"			|				//string
+\“[^\”\n]*\”			{return CONST_STRING;} 	//String
+[0-9]+([\.][0-9]*)?		{return NUMERO;} 	//Número
+:						{return DOIS_PONTOS;} 	//Dois pontos
+integer					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
+real					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
+array					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
+of						{return OF;} 	//Palavra reservada
+record					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
+function				{return FUNCTION;} 	//Palavra reservada
+:=						{return ATRIBUICAO;} 	//Atribuição
+while					{return WHILE;} 	//Palavra reservada
+if						{return IF;} 	//Palavra reservada
+then					{return THEN;} 	//Palavra reservada
+write					{return WRITE;} 	//Palavra reservada
+else					{return ELSE;} 	//Palavra reservada
+"("						{return ABRE_PARENTESES;} 	//Abre parenteses
+")"						{return FECHA_PARENTESES;} 	//Fecha parenteses
+,						{return VIRGULA;} 	//Vírgula
+"."						{return PONTO;} 	//Ponto
+"["						{return ABRE_COLCHETES;} 	//Abre colchetes
+"]"						{return FECHA_COLCHETES;} 	//Fecha colchetes
 ">"						|
 "<"						|
 =						|
-!						{return 1;} 	//Operador lógico
+!						{return OPERADOR_LOGICO;} 	//Operador lógico
 "+"						|
 "-"						|
-"*"						{return 1;} 	//Operador matemático
-"/"						{return 1;} 	//Barra
-[a-zA-Z]+[a-zA-Z0-9]*	{return 1;} 	//Identificador
+"*"						|
+"/"						{return OPERADOR_MATEMATICO;} 	//Operador matemático
+[a-zA-Z]+[a-zA-Z0-9]*	{return IDENTIFICADOR;} 	//Identificador
 
-[ \t\n]					;				//Espaço, tabulação e quebra de linha(ignorados)
-.						{return ERRO;} 	//carácter inesperado
+"{"[^"}"]*"}"		  	;	//Comentario
+[ \t\n]				;				//Espaço, tabulação e quebra de linha(ignorados)
+.				{return ERRO;} 	//carácter inesperado
 %%
 
 int yywrap(void)

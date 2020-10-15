@@ -67,7 +67,7 @@ int main(void){
     printf("Tokens encontrados:\n");
     temp = tokenIni;
     while(temp){
-        printf("%d:  [%s]\n", temp->id, temp->str);
+        printf("Classificacao: %d  Conteudo[%s]\n", temp->id, temp->str);
         temp = temp->next;
     }
     //imprime lista de erros
