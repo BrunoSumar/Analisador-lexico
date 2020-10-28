@@ -15,11 +15,11 @@ var						{return VAR;} 	//Palavra reservada
 \"[^\"\n]*\"			{return CONST_STRING;} 	//String
 [0-9]+([\.][0-9]*)?		{return NUMERO;} 	//Número
 :						{return DOIS_PONTOS;} 	//Dois pontos
-integer					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
-real					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
-array					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
+integer					{return INTEGER;} 	//Palavra reservada; tipo de dado
+real					{return REAL;} 	//Palavra reservada; tipo de dado
+array					{return ARRAY;} 	//Palavra reservada; tipo de dado
 of						{return OF;} 	//Palavra reservada
-record					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
+record					{return RECORD;} 	//Palavra reservada; tipo de dado
 function				{return FUNCTION;} 	//Palavra reservada
 :=						{return ATRIBUICAO;} 	//Atribuição
 while					{return WHILE;} 	//Palavra reservada
@@ -27,20 +27,21 @@ if						{return IF;} 	//Palavra reservada
 then					{return THEN;} 	//Palavra reservada
 write					{return WRITE;} 	//Palavra reservada
 else					{return ELSE;} 	//Palavra reservada
+read                    {return READ;}  //Palavra reservada
 "("						{return ABRE_PARENTESES;} 	//Abre parenteses
 ")"						{return FECHA_PARENTESES;} 	//Fecha parenteses
 ,						{return VIRGULA;} 	//Vírgula
 "."						{return PONTO;} 	//Ponto
 "["						{return ABRE_COLCHETES;} 	//Abre colchetes
 "]"						{return FECHA_COLCHETES;} 	//Fecha colchetes
-">"						|
-"<"						|
-=						|
-!						{return OPERADOR_LOGICO;} 	//Operador lógico
-"+"						|
-"-"						|
-"*"						|
-"/"						{return OPERADOR_MATEMATICO;} 	//Operador matemático
+">"						{return MAIOR_QUE;}
+"<"						{return MENOR_QUE;}
+=						{return IGUAL;}
+!						{return EXCLAMACAO;} 	//Operador lógico
+"+"						{return SOMA;}
+"-"						{return SUBTRACAO;}
+"*"						{return MULT;}
+"/"						{return BARRA;} 	//Operador matemático
 [a-zA-Z]+[a-zA-Z0-9]*	{return IDENTIFICADOR;} 	//Identificador
 
 "{"[^"}"]*"}"		  	;	//Comentario
