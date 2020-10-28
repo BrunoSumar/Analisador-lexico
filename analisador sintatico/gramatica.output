@@ -1,0 +1,1462 @@
+Terminais sem uso na gramática
+
+    ERRO
+
+
+Estado 5 conflitos: 1 de redução/redução
+Estado 45 conflitos: 1 de redução/redução
+Estado 57 conflitos: 6 de deslocamento/redução
+Estado 98 conflitos: 1 de deslocamento/redução
+
+
+Gramática
+
+    0 $accept: programa $end
+
+    1 programa: PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo
+
+    2 corpo: declaracoes BEGIN_ lista_com END corpo
+    3      | %empty
+
+    4 declaracoes: def_const def_tipos def_var lista_func
+    5            | %empty
+
+    6 def_const: CONST lista_const
+    7          | %empty
+
+    8 def_tipos: TYPE lista_tipos
+    9          | %empty
+
+   10 def_var: VAR lista_var
+   11        | %empty
+
+   12 lista_const: constante lista_const
+   13            | constante
+
+   14 constante: IDENTIFICADOR IGUAL const_valor PONTO_E_VIRGULA
+
+   15 const_valor: CONST_STRING
+   16            | exp_mat
+
+   17 numero: NUMERO
+
+   18 lista_tipos: tipo PONTO_E_VIRGULA lista_tipos
+   19            | tipo
+
+   20 tipo: IDENTIFICADOR IGUAL tipo_dado
+
+   21 lista_var: variavel PONTO_E_VIRGULA lista_var
+   22          | variavel
+
+   23 variavel: lista_id DOIS_PONTOS tipo_dado
+
+   24 lista_id: IDENTIFICADOR VIRGULA lista_id
+   25         | IDENTIFICADOR
+
+   26 tipo_dado: INTEGER
+   27          | REAL
+   28          | ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado
+   29          | RECORD lista_var END
+   30          | IDENTIFICADOR
+
+   31 lista_func: funcao lista_func
+   32           | %empty
+
+   33 funcao: nome_funcao bloco_funcao
+
+   34 nome_funcao: FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado
+
+   35 bloco_funcao: def_var bloco
+   36             | bloco
+
+   37 bloco: BEGIN_ lista_com END
+   38      | comando
+
+   39 lista_com: comando PONTO_E_VIRGULA lista_com
+   40          | %empty
+
+   41 comando: nome ATRIBUICAO valor
+   42        | WHILE exp_logica bloco
+   43        | IF exp_logica THEN bloco else
+   44        | WRITE const_valor
+   45        | READ nome
+
+   46 else: ELSE bloco
+   47     | %empty
+
+   48 valor: exp_mat
+   49      | IDENTIFICADOR lista_param
+
+   50 lista_param: ABRE_PARENTESES lista_nome FECHA_PARENTESES
+
+   51 lista_nome: parametro VIRGULA lista_nome
+   52           | parametro
+   53           | %empty
+
+   54 exp_logica: exp_mat op_logico exp_logica
+   55           | exp_mat
+
+   56 exp_mat: parametro op_mat exp_mat
+   57        | parametro
+
+   58 parametro: nome
+   59          | numero
+
+   60 op_logico: MAIOR_QUE
+   61          | MENOR_QUE
+   62          | IGUAL
+   63          | EXCLAMACAO
+
+   64 op_mat: SOMA
+   65       | SUBTRACAO
+   66       | MULT
+   67       | BARRA
+
+   68 nome: IDENTIFICADOR
+   69     | IDENTIFICADOR PONTO nome
+   70     | IDENTIFICADOR ABRE_COLCHETES parametro FECHA_COLCHETES
+
+
+Terminais, com as regras onde eles aparecem
+
+    $end (0) 0
+    error (256)
+    PROGRAM (258) 1
+    BEGIN_ (259) 2 37
+    END (260) 2 29 37
+    CONST (261) 6
+    TYPE (262) 8
+    VAR (263) 10
+    INTEGER (264) 26
+    REAL (265) 27
+    ARRAY (266) 28
+    RECORD (267) 29
+    OF (268) 28
+    FUNCTION (269) 34
+    WHILE (270) 42
+    IF (271) 43
+    THEN (272) 43
+    ELSE (273) 46
+    WRITE (274) 44
+    READ (275) 45
+    ATRIBUICAO (276) 41
+    ABRE_PARENTESES (277) 34 50
+    FECHA_PARENTESES (278) 34 50
+    VIRGULA (279) 24 51
+    PONTO (280) 69
+    ABRE_COLCHETES (281) 28 70
+    FECHA_COLCHETES (282) 28 70
+    IDENTIFICADOR (283) 1 14 20 24 25 30 34 49 68 69 70
+    PONTO_E_VIRGULA (284) 1 14 18 21 39
+    DOIS_PONTOS (285) 23 34
+    CONST_STRING (286) 15
+    NUMERO (287) 17
+    MAIOR_QUE (288) 60
+    MENOR_QUE (289) 61
+    IGUAL (290) 14 20 62
+    SOMA (291) 64
+    SUBTRACAO (292) 65
+    MULT (293) 66
+    EXCLAMACAO (294) 63
+    BARRA (295) 67
+    ERRO (296)
+
+
+Não terminais com as regras onde eles aparecem
+
+    $accept (42)
+        à esquerda: 0
+    programa (43)
+        à esquerda: 1
+        à direita: 0
+    corpo (44)
+        à esquerda: 2 3
+        à direita: 1 2
+    declaracoes (45)
+        à esquerda: 4 5
+        à direita: 2
+    def_const (46)
+        à esquerda: 6 7
+        à direita: 4
+    def_tipos (47)
+        à esquerda: 8 9
+        à direita: 4
+    def_var (48)
+        à esquerda: 10 11
+        à direita: 4 35
+    lista_const (49)
+        à esquerda: 12 13
+        à direita: 6 12
+    constante (50)
+        à esquerda: 14
+        à direita: 12 13
+    const_valor (51)
+        à esquerda: 15 16
+        à direita: 14 44
+    numero (52)
+        à esquerda: 17
+        à direita: 28 59
+    lista_tipos (53)
+        à esquerda: 18 19
+        à direita: 8 18
+    tipo (54)
+        à esquerda: 20
+        à direita: 18 19
+    lista_var (55)
+        à esquerda: 21 22
+        à direita: 10 21 29 34
+    variavel (56)
+        à esquerda: 23
+        à direita: 21 22
+    lista_id (57)
+        à esquerda: 24 25
+        à direita: 23 24
+    tipo_dado (58)
+        à esquerda: 26 27 28 29 30
+        à direita: 20 23 28 34
+    lista_func (59)
+        à esquerda: 31 32
+        à direita: 4 31
+    funcao (60)
+        à esquerda: 33
+        à direita: 31
+    nome_funcao (61)
+        à esquerda: 34
+        à direita: 33
+    bloco_funcao (62)
+        à esquerda: 35 36
+        à direita: 33
+    bloco (63)
+        à esquerda: 37 38
+        à direita: 35 36 42 43 46
+    lista_com (64)
+        à esquerda: 39 40
+        à direita: 2 37 39
+    comando (65)
+        à esquerda: 41 42 43 44 45
+        à direita: 38 39
+    else (66)
+        à esquerda: 46 47
+        à direita: 43
+    valor (67)
+        à esquerda: 48 49
+        à direita: 41
+    lista_param (68)
+        à esquerda: 50
+        à direita: 49
+    lista_nome (69)
+        à esquerda: 51 52 53
+        à direita: 50 51
+    exp_logica (70)
+        à esquerda: 54 55
+        à direita: 42 43 54
+    exp_mat (71)
+        à esquerda: 56 57
+        à direita: 16 48 54 55 56
+    parametro (72)
+        à esquerda: 58 59
+        à direita: 51 52 56 57 70
+    op_logico (73)
+        à esquerda: 60 61 62 63
+        à direita: 54
+    op_mat (74)
+        à esquerda: 64 65 66 67
+        à direita: 56
+    nome (75)
+        à esquerda: 68 69 70
+        à direita: 41 45 58 69
+
+
+Estado 0
+
+    0 $accept: . programa $end
+
+    PROGRAM  deslocar, e ir ao estado 1
+
+    programa  ir ao estado 2
+
+
+Estado 1
+
+    1 programa: PROGRAM . IDENTIFICADOR PONTO_E_VIRGULA corpo
+
+    IDENTIFICADOR  deslocar, e ir ao estado 3
+
+
+Estado 2
+
+    0 $accept: programa . $end
+
+    $end  deslocar, e ir ao estado 4
+
+
+Estado 3
+
+    1 programa: PROGRAM IDENTIFICADOR . PONTO_E_VIRGULA corpo
+
+    PONTO_E_VIRGULA  deslocar, e ir ao estado 5
+
+
+Estado 4
+
+    0 $accept: programa $end .
+
+    $padrão  aceitar
+
+
+Estado 5
+
+    1 programa: PROGRAM IDENTIFICADOR PONTO_E_VIRGULA . corpo
+
+    CONST  deslocar, e ir ao estado 6
+
+    $end      reduzir usando a regra 3 (corpo)
+    BEGIN_    reduzir usando a regra 5 (declaracoes)
+    BEGIN_    [reduzir usando a regra 7 (def_const)]
+    $padrão  reduzir usando a regra 7 (def_const)
+
+    corpo        ir ao estado 7
+    declaracoes  ir ao estado 8
+    def_const    ir ao estado 9
+
+
+Estado 6
+
+    6 def_const: CONST . lista_const
+
+    IDENTIFICADOR  deslocar, e ir ao estado 10
+
+    lista_const  ir ao estado 11
+    constante    ir ao estado 12
+
+
+Estado 7
+
+    1 programa: PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo .
+
+    $padrão  reduzir usando a regra 1 (programa)
+
+
+Estado 8
+
+    2 corpo: declaracoes . BEGIN_ lista_com END corpo
+
+    BEGIN_  deslocar, e ir ao estado 13
+
+
+Estado 9
+
+    4 declaracoes: def_const . def_tipos def_var lista_func
+
+    TYPE  deslocar, e ir ao estado 14
+
+    $padrão  reduzir usando a regra 9 (def_tipos)
+
+    def_tipos  ir ao estado 15
+
+
+Estado 10
+
+   14 constante: IDENTIFICADOR . IGUAL const_valor PONTO_E_VIRGULA
+
+    IGUAL  deslocar, e ir ao estado 16
+
+
+Estado 11
+
+    6 def_const: CONST lista_const .
+
+    $padrão  reduzir usando a regra 6 (def_const)
+
+
+Estado 12
+
+   12 lista_const: constante . lista_const
+   13            | constante .
+
+    IDENTIFICADOR  deslocar, e ir ao estado 10
+
+    $padrão  reduzir usando a regra 13 (lista_const)
+
+    lista_const  ir ao estado 17
+    constante    ir ao estado 12
+
+
+Estado 13
+
+    2 corpo: declaracoes BEGIN_ . lista_com END corpo
+
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    $padrão  reduzir usando a regra 40 (lista_com)
+
+    lista_com  ir ao estado 23
+    comando    ir ao estado 24
+    nome       ir ao estado 25
+
+
+Estado 14
+
+    8 def_tipos: TYPE . lista_tipos
+
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+
+    lista_tipos  ir ao estado 27
+    tipo         ir ao estado 28
+
+
+Estado 15
+
+    4 declaracoes: def_const def_tipos . def_var lista_func
+
+    VAR  deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 11 (def_var)
+
+    def_var  ir ao estado 30
+
+
+Estado 16
+
+   14 constante: IDENTIFICADOR IGUAL . const_valor PONTO_E_VIRGULA
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    CONST_STRING   deslocar, e ir ao estado 31
+    NUMERO         deslocar, e ir ao estado 32
+
+    const_valor  ir ao estado 33
+    numero       ir ao estado 34
+    exp_mat      ir ao estado 35
+    parametro    ir ao estado 36
+    nome         ir ao estado 37
+
+
+Estado 17
+
+   12 lista_const: constante lista_const .
+
+    $padrão  reduzir usando a regra 12 (lista_const)
+
+
+Estado 18
+
+   42 comando: WHILE . exp_logica bloco
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    NUMERO         deslocar, e ir ao estado 32
+
+    numero      ir ao estado 34
+    exp_logica  ir ao estado 38
+    exp_mat     ir ao estado 39
+    parametro   ir ao estado 36
+    nome        ir ao estado 37
+
+
+Estado 19
+
+   43 comando: IF . exp_logica THEN bloco else
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    NUMERO         deslocar, e ir ao estado 32
+
+    numero      ir ao estado 34
+    exp_logica  ir ao estado 40
+    exp_mat     ir ao estado 39
+    parametro   ir ao estado 36
+    nome        ir ao estado 37
+
+
+Estado 20
+
+   44 comando: WRITE . const_valor
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    CONST_STRING   deslocar, e ir ao estado 31
+    NUMERO         deslocar, e ir ao estado 32
+
+    const_valor  ir ao estado 41
+    numero       ir ao estado 34
+    exp_mat      ir ao estado 35
+    parametro    ir ao estado 36
+    nome         ir ao estado 37
+
+
+Estado 21
+
+   45 comando: READ . nome
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    nome  ir ao estado 42
+
+
+Estado 22
+
+   68 nome: IDENTIFICADOR .
+   69     | IDENTIFICADOR . PONTO nome
+   70     | IDENTIFICADOR . ABRE_COLCHETES parametro FECHA_COLCHETES
+
+    PONTO           deslocar, e ir ao estado 43
+    ABRE_COLCHETES  deslocar, e ir ao estado 44
+
+    $padrão  reduzir usando a regra 68 (nome)
+
+
+Estado 23
+
+    2 corpo: declaracoes BEGIN_ lista_com . END corpo
+
+    END  deslocar, e ir ao estado 45
+
+
+Estado 24
+
+   39 lista_com: comando . PONTO_E_VIRGULA lista_com
+
+    PONTO_E_VIRGULA  deslocar, e ir ao estado 46
+
+
+Estado 25
+
+   41 comando: nome . ATRIBUICAO valor
+
+    ATRIBUICAO  deslocar, e ir ao estado 47
+
+
+Estado 26
+
+   20 tipo: IDENTIFICADOR . IGUAL tipo_dado
+
+    IGUAL  deslocar, e ir ao estado 48
+
+
+Estado 27
+
+    8 def_tipos: TYPE lista_tipos .
+
+    $padrão  reduzir usando a regra 8 (def_tipos)
+
+
+Estado 28
+
+   18 lista_tipos: tipo . PONTO_E_VIRGULA lista_tipos
+   19            | tipo .
+
+    PONTO_E_VIRGULA  deslocar, e ir ao estado 49
+
+    $padrão  reduzir usando a regra 19 (lista_tipos)
+
+
+Estado 29
+
+   10 def_var: VAR . lista_var
+
+    IDENTIFICADOR  deslocar, e ir ao estado 50
+
+    lista_var  ir ao estado 51
+    variavel   ir ao estado 52
+    lista_id   ir ao estado 53
+
+
+Estado 30
+
+    4 declaracoes: def_const def_tipos def_var . lista_func
+
+    FUNCTION  deslocar, e ir ao estado 54
+
+    $padrão  reduzir usando a regra 32 (lista_func)
+
+    lista_func   ir ao estado 55
+    funcao       ir ao estado 56
+    nome_funcao  ir ao estado 57
+
+
+Estado 31
+
+   15 const_valor: CONST_STRING .
+
+    $padrão  reduzir usando a regra 15 (const_valor)
+
+
+Estado 32
+
+   17 numero: NUMERO .
+
+    $padrão  reduzir usando a regra 17 (numero)
+
+
+Estado 33
+
+   14 constante: IDENTIFICADOR IGUAL const_valor . PONTO_E_VIRGULA
+
+    PONTO_E_VIRGULA  deslocar, e ir ao estado 58
+
+
+Estado 34
+
+   59 parametro: numero .
+
+    $padrão  reduzir usando a regra 59 (parametro)
+
+
+Estado 35
+
+   16 const_valor: exp_mat .
+
+    $padrão  reduzir usando a regra 16 (const_valor)
+
+
+Estado 36
+
+   56 exp_mat: parametro . op_mat exp_mat
+   57        | parametro .
+
+    SOMA       deslocar, e ir ao estado 59
+    SUBTRACAO  deslocar, e ir ao estado 60
+    MULT       deslocar, e ir ao estado 61
+    BARRA      deslocar, e ir ao estado 62
+
+    $padrão  reduzir usando a regra 57 (exp_mat)
+
+    op_mat  ir ao estado 63
+
+
+Estado 37
+
+   58 parametro: nome .
+
+    $padrão  reduzir usando a regra 58 (parametro)
+
+
+Estado 38
+
+   42 comando: WHILE exp_logica . bloco
+
+    BEGIN_         deslocar, e ir ao estado 64
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    bloco    ir ao estado 65
+    comando  ir ao estado 66
+    nome     ir ao estado 25
+
+
+Estado 39
+
+   54 exp_logica: exp_mat . op_logico exp_logica
+   55           | exp_mat .
+
+    MAIOR_QUE   deslocar, e ir ao estado 67
+    MENOR_QUE   deslocar, e ir ao estado 68
+    IGUAL       deslocar, e ir ao estado 69
+    EXCLAMACAO  deslocar, e ir ao estado 70
+
+    $padrão  reduzir usando a regra 55 (exp_logica)
+
+    op_logico  ir ao estado 71
+
+
+Estado 40
+
+   43 comando: IF exp_logica . THEN bloco else
+
+    THEN  deslocar, e ir ao estado 72
+
+
+Estado 41
+
+   44 comando: WRITE const_valor .
+
+    $padrão  reduzir usando a regra 44 (comando)
+
+
+Estado 42
+
+   45 comando: READ nome .
+
+    $padrão  reduzir usando a regra 45 (comando)
+
+
+Estado 43
+
+   69 nome: IDENTIFICADOR PONTO . nome
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    nome  ir ao estado 73
+
+
+Estado 44
+
+   70 nome: IDENTIFICADOR ABRE_COLCHETES . parametro FECHA_COLCHETES
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    NUMERO         deslocar, e ir ao estado 32
+
+    numero     ir ao estado 34
+    parametro  ir ao estado 74
+    nome       ir ao estado 37
+
+
+Estado 45
+
+    2 corpo: declaracoes BEGIN_ lista_com END . corpo
+
+    CONST  deslocar, e ir ao estado 6
+
+    $end      reduzir usando a regra 3 (corpo)
+    BEGIN_    reduzir usando a regra 5 (declaracoes)
+    BEGIN_    [reduzir usando a regra 7 (def_const)]
+    $padrão  reduzir usando a regra 7 (def_const)
+
+    corpo        ir ao estado 75
+    declaracoes  ir ao estado 8
+    def_const    ir ao estado 9
+
+
+Estado 46
+
+   39 lista_com: comando PONTO_E_VIRGULA . lista_com
+
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    $padrão  reduzir usando a regra 40 (lista_com)
+
+    lista_com  ir ao estado 76
+    comando    ir ao estado 24
+    nome       ir ao estado 25
+
+
+Estado 47
+
+   41 comando: nome ATRIBUICAO . valor
+
+    IDENTIFICADOR  deslocar, e ir ao estado 77
+    NUMERO         deslocar, e ir ao estado 32
+
+    numero     ir ao estado 34
+    valor      ir ao estado 78
+    exp_mat    ir ao estado 79
+    parametro  ir ao estado 36
+    nome       ir ao estado 37
+
+
+Estado 48
+
+   20 tipo: IDENTIFICADOR IGUAL . tipo_dado
+
+    INTEGER        deslocar, e ir ao estado 80
+    REAL           deslocar, e ir ao estado 81
+    ARRAY          deslocar, e ir ao estado 82
+    RECORD         deslocar, e ir ao estado 83
+    IDENTIFICADOR  deslocar, e ir ao estado 84
+
+    tipo_dado  ir ao estado 85
+
+
+Estado 49
+
+   18 lista_tipos: tipo PONTO_E_VIRGULA . lista_tipos
+
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+
+    lista_tipos  ir ao estado 86
+    tipo         ir ao estado 28
+
+
+Estado 50
+
+   24 lista_id: IDENTIFICADOR . VIRGULA lista_id
+   25         | IDENTIFICADOR .
+
+    VIRGULA  deslocar, e ir ao estado 87
+
+    $padrão  reduzir usando a regra 25 (lista_id)
+
+
+Estado 51
+
+   10 def_var: VAR lista_var .
+
+    $padrão  reduzir usando a regra 10 (def_var)
+
+
+Estado 52
+
+   21 lista_var: variavel . PONTO_E_VIRGULA lista_var
+   22          | variavel .
+
+    PONTO_E_VIRGULA  deslocar, e ir ao estado 88
+
+    $padrão  reduzir usando a regra 22 (lista_var)
+
+
+Estado 53
+
+   23 variavel: lista_id . DOIS_PONTOS tipo_dado
+
+    DOIS_PONTOS  deslocar, e ir ao estado 89
+
+
+Estado 54
+
+   34 nome_funcao: FUNCTION . IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado
+
+    IDENTIFICADOR  deslocar, e ir ao estado 90
+
+
+Estado 55
+
+    4 declaracoes: def_const def_tipos def_var lista_func .
+
+    $padrão  reduzir usando a regra 4 (declaracoes)
+
+
+Estado 56
+
+   31 lista_func: funcao . lista_func
+
+    FUNCTION  deslocar, e ir ao estado 54
+
+    $padrão  reduzir usando a regra 32 (lista_func)
+
+    lista_func   ir ao estado 91
+    funcao       ir ao estado 56
+    nome_funcao  ir ao estado 57
+
+
+Estado 57
+
+   33 funcao: nome_funcao . bloco_funcao
+
+    BEGIN_         deslocar, e ir ao estado 64
+    VAR            deslocar, e ir ao estado 29
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    BEGIN_         [reduzir usando a regra 11 (def_var)]
+    WHILE          [reduzir usando a regra 11 (def_var)]
+    IF             [reduzir usando a regra 11 (def_var)]
+    WRITE          [reduzir usando a regra 11 (def_var)]
+    READ           [reduzir usando a regra 11 (def_var)]
+    IDENTIFICADOR  [reduzir usando a regra 11 (def_var)]
+
+    def_var       ir ao estado 92
+    bloco_funcao  ir ao estado 93
+    bloco         ir ao estado 94
+    comando       ir ao estado 66
+    nome          ir ao estado 25
+
+
+Estado 58
+
+   14 constante: IDENTIFICADOR IGUAL const_valor PONTO_E_VIRGULA .
+
+    $padrão  reduzir usando a regra 14 (constante)
+
+
+Estado 59
+
+   64 op_mat: SOMA .
+
+    $padrão  reduzir usando a regra 64 (op_mat)
+
+
+Estado 60
+
+   65 op_mat: SUBTRACAO .
+
+    $padrão  reduzir usando a regra 65 (op_mat)
+
+
+Estado 61
+
+   66 op_mat: MULT .
+
+    $padrão  reduzir usando a regra 66 (op_mat)
+
+
+Estado 62
+
+   67 op_mat: BARRA .
+
+    $padrão  reduzir usando a regra 67 (op_mat)
+
+
+Estado 63
+
+   56 exp_mat: parametro op_mat . exp_mat
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    NUMERO         deslocar, e ir ao estado 32
+
+    numero     ir ao estado 34
+    exp_mat    ir ao estado 95
+    parametro  ir ao estado 36
+    nome       ir ao estado 37
+
+
+Estado 64
+
+   37 bloco: BEGIN_ . lista_com END
+
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    $padrão  reduzir usando a regra 40 (lista_com)
+
+    lista_com  ir ao estado 96
+    comando    ir ao estado 24
+    nome       ir ao estado 25
+
+
+Estado 65
+
+   42 comando: WHILE exp_logica bloco .
+
+    $padrão  reduzir usando a regra 42 (comando)
+
+
+Estado 66
+
+   38 bloco: comando .
+
+    $padrão  reduzir usando a regra 38 (bloco)
+
+
+Estado 67
+
+   60 op_logico: MAIOR_QUE .
+
+    $padrão  reduzir usando a regra 60 (op_logico)
+
+
+Estado 68
+
+   61 op_logico: MENOR_QUE .
+
+    $padrão  reduzir usando a regra 61 (op_logico)
+
+
+Estado 69
+
+   62 op_logico: IGUAL .
+
+    $padrão  reduzir usando a regra 62 (op_logico)
+
+
+Estado 70
+
+   63 op_logico: EXCLAMACAO .
+
+    $padrão  reduzir usando a regra 63 (op_logico)
+
+
+Estado 71
+
+   54 exp_logica: exp_mat op_logico . exp_logica
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    NUMERO         deslocar, e ir ao estado 32
+
+    numero      ir ao estado 34
+    exp_logica  ir ao estado 97
+    exp_mat     ir ao estado 39
+    parametro   ir ao estado 36
+    nome        ir ao estado 37
+
+
+Estado 72
+
+   43 comando: IF exp_logica THEN . bloco else
+
+    BEGIN_         deslocar, e ir ao estado 64
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    bloco    ir ao estado 98
+    comando  ir ao estado 66
+    nome     ir ao estado 25
+
+
+Estado 73
+
+   69 nome: IDENTIFICADOR PONTO nome .
+
+    $padrão  reduzir usando a regra 69 (nome)
+
+
+Estado 74
+
+   70 nome: IDENTIFICADOR ABRE_COLCHETES parametro . FECHA_COLCHETES
+
+    FECHA_COLCHETES  deslocar, e ir ao estado 99
+
+
+Estado 75
+
+    2 corpo: declaracoes BEGIN_ lista_com END corpo .
+
+    $padrão  reduzir usando a regra 2 (corpo)
+
+
+Estado 76
+
+   39 lista_com: comando PONTO_E_VIRGULA lista_com .
+
+    $padrão  reduzir usando a regra 39 (lista_com)
+
+
+Estado 77
+
+   49 valor: IDENTIFICADOR . lista_param
+   68 nome: IDENTIFICADOR .
+   69     | IDENTIFICADOR . PONTO nome
+   70     | IDENTIFICADOR . ABRE_COLCHETES parametro FECHA_COLCHETES
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 100
+    PONTO            deslocar, e ir ao estado 43
+    ABRE_COLCHETES   deslocar, e ir ao estado 44
+
+    $padrão  reduzir usando a regra 68 (nome)
+
+    lista_param  ir ao estado 101
+
+
+Estado 78
+
+   41 comando: nome ATRIBUICAO valor .
+
+    $padrão  reduzir usando a regra 41 (comando)
+
+
+Estado 79
+
+   48 valor: exp_mat .
+
+    $padrão  reduzir usando a regra 48 (valor)
+
+
+Estado 80
+
+   26 tipo_dado: INTEGER .
+
+    $padrão  reduzir usando a regra 26 (tipo_dado)
+
+
+Estado 81
+
+   27 tipo_dado: REAL .
+
+    $padrão  reduzir usando a regra 27 (tipo_dado)
+
+
+Estado 82
+
+   28 tipo_dado: ARRAY . ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado
+
+    ABRE_COLCHETES  deslocar, e ir ao estado 102
+
+
+Estado 83
+
+   29 tipo_dado: RECORD . lista_var END
+
+    IDENTIFICADOR  deslocar, e ir ao estado 50
+
+    lista_var  ir ao estado 103
+    variavel   ir ao estado 52
+    lista_id   ir ao estado 53
+
+
+Estado 84
+
+   30 tipo_dado: IDENTIFICADOR .
+
+    $padrão  reduzir usando a regra 30 (tipo_dado)
+
+
+Estado 85
+
+   20 tipo: IDENTIFICADOR IGUAL tipo_dado .
+
+    $padrão  reduzir usando a regra 20 (tipo)
+
+
+Estado 86
+
+   18 lista_tipos: tipo PONTO_E_VIRGULA lista_tipos .
+
+    $padrão  reduzir usando a regra 18 (lista_tipos)
+
+
+Estado 87
+
+   24 lista_id: IDENTIFICADOR VIRGULA . lista_id
+
+    IDENTIFICADOR  deslocar, e ir ao estado 50
+
+    lista_id  ir ao estado 104
+
+
+Estado 88
+
+   21 lista_var: variavel PONTO_E_VIRGULA . lista_var
+
+    IDENTIFICADOR  deslocar, e ir ao estado 50
+
+    lista_var  ir ao estado 105
+    variavel   ir ao estado 52
+    lista_id   ir ao estado 53
+
+
+Estado 89
+
+   23 variavel: lista_id DOIS_PONTOS . tipo_dado
+
+    INTEGER        deslocar, e ir ao estado 80
+    REAL           deslocar, e ir ao estado 81
+    ARRAY          deslocar, e ir ao estado 82
+    RECORD         deslocar, e ir ao estado 83
+    IDENTIFICADOR  deslocar, e ir ao estado 84
+
+    tipo_dado  ir ao estado 106
+
+
+Estado 90
+
+   34 nome_funcao: FUNCTION IDENTIFICADOR . ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 107
+
+
+Estado 91
+
+   31 lista_func: funcao lista_func .
+
+    $padrão  reduzir usando a regra 31 (lista_func)
+
+
+Estado 92
+
+   35 bloco_funcao: def_var . bloco
+
+    BEGIN_         deslocar, e ir ao estado 64
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    bloco    ir ao estado 108
+    comando  ir ao estado 66
+    nome     ir ao estado 25
+
+
+Estado 93
+
+   33 funcao: nome_funcao bloco_funcao .
+
+    $padrão  reduzir usando a regra 33 (funcao)
+
+
+Estado 94
+
+   36 bloco_funcao: bloco .
+
+    $padrão  reduzir usando a regra 36 (bloco_funcao)
+
+
+Estado 95
+
+   56 exp_mat: parametro op_mat exp_mat .
+
+    $padrão  reduzir usando a regra 56 (exp_mat)
+
+
+Estado 96
+
+   37 bloco: BEGIN_ lista_com . END
+
+    END  deslocar, e ir ao estado 109
+
+
+Estado 97
+
+   54 exp_logica: exp_mat op_logico exp_logica .
+
+    $padrão  reduzir usando a regra 54 (exp_logica)
+
+
+Estado 98
+
+   43 comando: IF exp_logica THEN bloco . else
+
+    ELSE  deslocar, e ir ao estado 110
+
+    ELSE      [reduzir usando a regra 47 (else)]
+    $padrão  reduzir usando a regra 47 (else)
+
+    else  ir ao estado 111
+
+
+Estado 99
+
+   70 nome: IDENTIFICADOR ABRE_COLCHETES parametro FECHA_COLCHETES .
+
+    $padrão  reduzir usando a regra 70 (nome)
+
+
+Estado 100
+
+   50 lista_param: ABRE_PARENTESES . lista_nome FECHA_PARENTESES
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    NUMERO         deslocar, e ir ao estado 32
+
+    $padrão  reduzir usando a regra 53 (lista_nome)
+
+    numero      ir ao estado 34
+    lista_nome  ir ao estado 112
+    parametro   ir ao estado 113
+    nome        ir ao estado 37
+
+
+Estado 101
+
+   49 valor: IDENTIFICADOR lista_param .
+
+    $padrão  reduzir usando a regra 49 (valor)
+
+
+Estado 102
+
+   28 tipo_dado: ARRAY ABRE_COLCHETES . numero FECHA_COLCHETES OF tipo_dado
+
+    NUMERO  deslocar, e ir ao estado 32
+
+    numero  ir ao estado 114
+
+
+Estado 103
+
+   29 tipo_dado: RECORD lista_var . END
+
+    END  deslocar, e ir ao estado 115
+
+
+Estado 104
+
+   24 lista_id: IDENTIFICADOR VIRGULA lista_id .
+
+    $padrão  reduzir usando a regra 24 (lista_id)
+
+
+Estado 105
+
+   21 lista_var: variavel PONTO_E_VIRGULA lista_var .
+
+    $padrão  reduzir usando a regra 21 (lista_var)
+
+
+Estado 106
+
+   23 variavel: lista_id DOIS_PONTOS tipo_dado .
+
+    $padrão  reduzir usando a regra 23 (variavel)
+
+
+Estado 107
+
+   34 nome_funcao: FUNCTION IDENTIFICADOR ABRE_PARENTESES . lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado
+
+    IDENTIFICADOR  deslocar, e ir ao estado 50
+
+    lista_var  ir ao estado 116
+    variavel   ir ao estado 52
+    lista_id   ir ao estado 53
+
+
+Estado 108
+
+   35 bloco_funcao: def_var bloco .
+
+    $padrão  reduzir usando a regra 35 (bloco_funcao)
+
+
+Estado 109
+
+   37 bloco: BEGIN_ lista_com END .
+
+    $padrão  reduzir usando a regra 37 (bloco)
+
+
+Estado 110
+
+   46 else: ELSE . bloco
+
+    BEGIN_         deslocar, e ir ao estado 64
+    WHILE          deslocar, e ir ao estado 18
+    IF             deslocar, e ir ao estado 19
+    WRITE          deslocar, e ir ao estado 20
+    READ           deslocar, e ir ao estado 21
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+
+    bloco    ir ao estado 117
+    comando  ir ao estado 66
+    nome     ir ao estado 25
+
+
+Estado 111
+
+   43 comando: IF exp_logica THEN bloco else .
+
+    $padrão  reduzir usando a regra 43 (comando)
+
+
+Estado 112
+
+   50 lista_param: ABRE_PARENTESES lista_nome . FECHA_PARENTESES
+
+    FECHA_PARENTESES  deslocar, e ir ao estado 118
+
+
+Estado 113
+
+   51 lista_nome: parametro . VIRGULA lista_nome
+   52           | parametro .
+
+    VIRGULA  deslocar, e ir ao estado 119
+
+    $padrão  reduzir usando a regra 52 (lista_nome)
+
+
+Estado 114
+
+   28 tipo_dado: ARRAY ABRE_COLCHETES numero . FECHA_COLCHETES OF tipo_dado
+
+    FECHA_COLCHETES  deslocar, e ir ao estado 120
+
+
+Estado 115
+
+   29 tipo_dado: RECORD lista_var END .
+
+    $padrão  reduzir usando a regra 29 (tipo_dado)
+
+
+Estado 116
+
+   34 nome_funcao: FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var . FECHA_PARENTESES DOIS_PONTOS tipo_dado
+
+    FECHA_PARENTESES  deslocar, e ir ao estado 121
+
+
+Estado 117
+
+   46 else: ELSE bloco .
+
+    $padrão  reduzir usando a regra 46 (else)
+
+
+Estado 118
+
+   50 lista_param: ABRE_PARENTESES lista_nome FECHA_PARENTESES .
+
+    $padrão  reduzir usando a regra 50 (lista_param)
+
+
+Estado 119
+
+   51 lista_nome: parametro VIRGULA . lista_nome
+
+    IDENTIFICADOR  deslocar, e ir ao estado 22
+    NUMERO         deslocar, e ir ao estado 32
+
+    $padrão  reduzir usando a regra 53 (lista_nome)
+
+    numero      ir ao estado 34
+    lista_nome  ir ao estado 122
+    parametro   ir ao estado 113
+    nome        ir ao estado 37
+
+
+Estado 120
+
+   28 tipo_dado: ARRAY ABRE_COLCHETES numero FECHA_COLCHETES . OF tipo_dado
+
+    OF  deslocar, e ir ao estado 123
+
+
+Estado 121
+
+   34 nome_funcao: FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES . DOIS_PONTOS tipo_dado
+
+    DOIS_PONTOS  deslocar, e ir ao estado 124
+
+
+Estado 122
+
+   51 lista_nome: parametro VIRGULA lista_nome .
+
+    $padrão  reduzir usando a regra 51 (lista_nome)
+
+
+Estado 123
+
+   28 tipo_dado: ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF . tipo_dado
+
+    INTEGER        deslocar, e ir ao estado 80
+    REAL           deslocar, e ir ao estado 81
+    ARRAY          deslocar, e ir ao estado 82
+    RECORD         deslocar, e ir ao estado 83
+    IDENTIFICADOR  deslocar, e ir ao estado 84
+
+    tipo_dado  ir ao estado 125
+
+
+Estado 124
+
+   34 nome_funcao: FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS . tipo_dado
+
+    INTEGER        deslocar, e ir ao estado 80
+    REAL           deslocar, e ir ao estado 81
+    ARRAY          deslocar, e ir ao estado 82
+    RECORD         deslocar, e ir ao estado 83
+    IDENTIFICADOR  deslocar, e ir ao estado 84
+
+    tipo_dado  ir ao estado 126
+
+
+Estado 125
+
+   28 tipo_dado: ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado .
+
+    $padrão  reduzir usando a regra 28 (tipo_dado)
+
+
+Estado 126
+
+   34 nome_funcao: FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado .
+
+    $padrão  reduzir usando a regra 34 (nome_funcao)

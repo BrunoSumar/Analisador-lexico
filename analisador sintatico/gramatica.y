@@ -53,11 +53,11 @@ int yylex();
 
 %%
 
-programa        : PROGRAM IDENTIFICADOR PONTO_E_VIRGULA  {printf("prog");}
+programa        : PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo {printf("prog");}
                 ;
 
-corpo           : declaracoes BEGIN_ lista_com END   {;}
-                | BEGIN_ lista_com END              {;}
+corpo           : declaracoes BEGIN_ lista_com END corpo  {printf(" corpo ");}
+                | /*  epsilon */              {;}
                 ;
 
 declaracoes     : def_const def_tipos def_var lista_func  {;}
