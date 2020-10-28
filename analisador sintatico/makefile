@@ -1,15 +1,12 @@
-CC=gcc
-DEPS=classLexica.h
-OUT=saida.out
-IN=teste
+##
+# Project Title
+#
+# @file
+# @version 0.1
 
-comp:  analisadorLexico.c  lex.yy.c
-	$(CC) $^ -o $(OUT)
+comp:
+	bison -d gramatica.y
+	flex gramatica.l
+	gcc -o saida lex.yy.c gramatica.tab.c
 
-.l.c: %.l $(DEPS)
-	flex $<
-
-run:
-	./$(OUT) <$(IN)
-
-.PHONY: run comp
+# end

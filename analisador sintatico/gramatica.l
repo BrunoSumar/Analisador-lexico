@@ -1,6 +1,6 @@
 
 %{
-#include "classLexica.h"
+#include "gramatica.tab.h"
 %}
 %option yylineno
 
@@ -12,8 +12,7 @@ end						{return END;} 	//Palavra reservada
 const					{return CONST;} 	//Palavra reservada
 type					{return TYPE;} 	//Palavra reservada
 var						{return VAR;} 	//Palavra reservada
-\"[^\"\n]*\"			|				//string
-\“[^\”\n]*\”			{return CONST_STRING;} 	//String
+\"[^\"\n]*\"			{return CONST_STRING;} 	//String
 [0-9]+([\.][0-9]*)?		{return NUMERO;} 	//Número
 :						{return DOIS_PONTOS;} 	//Dois pontos
 integer					{return TIPO_DE_DADO;} 	//Palavra reservada; tipo de dado
