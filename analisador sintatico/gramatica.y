@@ -5,7 +5,12 @@
 int yyerror();
 int yylex();
 
+extern int yylineno;
+extern int count;
 %}
+
+%union {char *str;double fl;}
+%define parse.error verbose
 
 %token PROGRAM
 %token BEGIN_
@@ -34,11 +39,11 @@ int yylex();
 %token PONTO
 %token ABRE_COLCHETES
 %token FECHA_COLCHETES
-%token IDENTIFICADOR
+%token <str> IDENTIFICADOR
 %token PONTO_E_VIRGULA
 %token DOIS_PONTOS
 %token CONST_STRING
-%token NUMERO
+%token <fl> NUMERO
 %token MAIOR_QUE
 %token MENOR_QUE
 %token IGUAL
@@ -53,149 +58,196 @@ int yylex();
 
 %%
 
-programa        : PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo {printf("prog");}
+programa        : PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo  
+                | error PONTO_E_VIRGULA corpo  
                 ;
 
-corpo           : declaracoes BEGIN_ lista_com END corpo  {printf(" corpo ");}
-                | /*  epsilon */              {;}
+corpo           : declaracoes BEGIN_ lista_com END 
+                | error END
+                | /*  epsilon */               
                 ;
 
-declaracoes     : def_const def_tipos def_var lista_func  {;}
-                | /* epsilon */                           {;}
+declaracoes     : def_const def_tipos def_var lista_func   
+                | error lista_func 
+                | /* epsilon */                            
                 ;
 
-def_const       : CONST lista_const                     {;}
-                | /* epsilon */                                      {;}
+def_const       : CONST lista_const               
+                | error   
+                | /* epsilon */                                       
                 ;
 
-def_tipos       : TYPE lista_tipos     {;}
-                | /* epsilon */       {;}
+def_tipos       : TYPE lista_tipos        
+                | error 
+                | /* epsilon */        
                 ;
 
-def_var         : VAR lista_var        {;}
-                | /* epsilon */           {;}
-
-lista_const     : constante lista_const  {;}
-                | constante            {;}
+def_var         : VAR lista_var /*  diferente da regra */         
+                | error 
+                | /* epsilon */            
                 ;
 
-constante       : IDENTIFICADOR IGUAL const_valor PONTO_E_VIRGULA  {;}
+lista_const     : constante lista_const   
+                | constante             
                 ;
 
-const_valor     : CONST_STRING   {;}
-                | exp_mat     {;}
+constante       : IDENTIFICADOR IGUAL const_valor PONTO_E_VIRGULA   
+                | error PONTO_E_VIRGULA
                 ;
 
-numero          : NUMERO                         {;}
+const_valor     : CONST_STRING    
+                | exp_mat      
+                | error 
                 ;
 
-lista_tipos     : tipo PONTO_E_VIRGULA lista_tipos        {;}
-                | tipo                                {;}
+numero          : NUMERO                          
                 ;
 
-tipo            : IDENTIFICADOR IGUAL tipo_dado          {;}
+lista_tipos     : tipo PONTO_E_VIRGULA lista_tipos         
+                | tipo                                 
+                | error PONTO_E_VIRGULA lista_tipos
                 ;
 
-lista_var       : variavel PONTO_E_VIRGULA lista_var     {;}
-                | variavel                    {;}
+tipo            : IDENTIFICADOR IGUAL tipo_dado           
+                | error  tipo_dado 
                 ;
 
-variavel        : lista_id DOIS_PONTOS tipo_dado         {;}
+lista_var       : variavel PONTO_E_VIRGULA lista_var      
+                | variavel                                
+                | error PONTO_E_VIRGULA
                 ;
 
-lista_id        : IDENTIFICADOR VIRGULA lista_id              {;}
-                | IDENTIFICADOR
+lista_def_var   : variavel PONTO_E_VIRGULA lista_def_var      
+                | variavel PONTO_E_VIRGULA                                
+                | error PONTO_E_VIRGULA
                 ;
 
-tipo_dado       : INTEGER                      {;}
-                | REAL                     {;}
-                | ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado  {;}
-                | RECORD lista_var END                           {;}
-                | IDENTIFICADOR                  {;}
+variavel        : lista_id DOIS_PONTOS tipo_dado          
                 ;
 
-lista_func      : funcao lista_func         {;}
-                | /*  epsilon */                {;}
+lista_id        : IDENTIFICADOR VIRGULA lista_id               
+                | IDENTIFICADOR                   
+                | error 
                 ;
 
-funcao          : nome_funcao bloco_funcao       {;}
+tipo_dado       : INTEGER                       
+                | REAL                      
+                | ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado   
+                | RECORD lista_def_var END    /*  diferente da regra */ 
+                | IDENTIFICADOR                   
+                | error 
                 ;
 
-nome_funcao     : FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado  {;}
+lista_func      : funcao lista_func          
+                | /*  epsilon */                 
+                | error 
                 ;
 
-bloco_funcao    : def_var bloco            {;}
-                | bloco           {;}
+funcao          : nome_funcao bloco_funcao        
+                | error 
                 ;
 
-bloco           : BEGIN_ lista_com END         {;}
-                | comando                    {;}
+nome_funcao     : FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado   
+                | FUNCTION IDENTIFICADOR ABRE_PARENTESES FECHA_PARENTESES DOIS_PONTOS tipo_dado   
+                | error 
                 ;
 
-lista_com       : comando PONTO_E_VIRGULA lista_com         {;}
-                | /*  epsilon */                             {;}
+bloco_funcao    : def_var bloco             
+                | bloco            
+                | error 
                 ;
 
-comando         : nome ATRIBUICAO valor                   {;}
-                | WHILE  exp_logica bloco                 {;}
-                | IF exp_logica THEN bloco else             {;}
-                | WRITE const_valor                  {;}
-                | READ nome                             {;}
+bloco           : BEGIN_ lista_com END          
+                | comando                     
+                | error 
                 ;
 
- else           : ELSE bloco                       {;}
-                | /*  epsilon */                      {;}
+lista_com       : comando PONTO_E_VIRGULA lista_com          
+                | comando
+                | error 
                 ;
 
-valor           : exp_mat                                 {;}
-                | IDENTIFICADOR lista_param                  {;}
+comando         : nome ATRIBUICAO valor                    
+                | WHILE  exp_logica bloco                  
+                | IF exp_logica THEN bloco else              
+                | WRITE const_valor                   
+                | READ nome                              
+                | error 
                 ;
 
-lista_param     : ABRE_PARENTESES lista_nome FECHA_PARENTESES  {;}
+ else           : ELSE bloco                        
+                | /*  epsilon */                       
+                | error 
                 ;
 
-lista_nome      : parametro VIRGULA lista_nome     {;}
-                | parametro                                     {;}
-                | /*  epsilon */                                {;}
+valor           : exp_mat                                  
+                | IDENTIFICADOR lista_param                   
                 ;
 
-exp_logica      : exp_mat op_logico exp_logica               {;}
-                | exp_mat                                     {;}
+lista_param     : ABRE_PARENTESES lista_nome FECHA_PARENTESES   
+                | error FECHA_PARENTESES
                 ;
 
-exp_mat         : parametro op_mat exp_mat                     {;}
-                | parametro                                    {;}
+lista_nome      : parametro VIRGULA lista_nome      
+                | parametro                                      
+                | /*  epsilon */                                 
                 ;
 
-parametro       : nome                                         {;}
-                | numero                                       {;}
+exp_logica      : exp_mat op_logico exp_logica                
+                | exp_mat                                      
                 ;
 
-op_logico       : MAIOR_QUE                  {;}
-                | MENOR_QUE                  {;}
-                | IGUAL                      {;}
-                | EXCLAMACAO                 {;}
+exp_mat         : parametro op_mat exp_mat                      
+                | parametro                                     
                 ;
 
-op_mat          : SOMA                       {;}
-                | SUBTRACAO                  {;}
-                | MULT                       {;}
-                | BARRA                      {;}
+parametro       : nome                                          
+                | numero                                        
                 ;
 
-nome            : IDENTIFICADOR                                           {;}
-                | IDENTIFICADOR PONTO nome                                {;}
-                | IDENTIFICADOR ABRE_COLCHETES parametro FECHA_COLCHETES  {;}
+op_logico       : MAIOR_QUE                   
+                | MENOR_QUE                   
+                | IGUAL                       
+                | EXCLAMACAO                  
+                ;
+
+op_mat          : SOMA                        
+                | SUBTRACAO                   
+                | MULT                        
+                | BARRA                       
+                ;
+
+nome            : IDENTIFICADOR                                            
+                | IDENTIFICADOR PONTO nome                                 
+                | IDENTIFICADOR ABRE_COLCHETES parametro FECHA_COLCHETES   
+                | error            
                 ;
 
 %%
 
 
 int yyerror(char const *s){
-  printf(" erro sintatico: %s\n", s);
+        count++;
+        printf("\n>> Linha: %d %s\n", yylineno, s);
 }
-
+int count = 0;
 
 int main (void) {
-  return yyparse( );
+  yyparse( );
+  if(count > 0){
+          printf("\nErros sintaticos encontrados: %d \n\n", count);
+  }else{
+          printf("\nNenhum erro econtrado.\n\n");
+  }
+
+  return 0;
 }
+
+
+/*
+ (eepitch-shell)
+ (eepitch-kill)
+ (eepitch-shell)
+make
+make run
+ */

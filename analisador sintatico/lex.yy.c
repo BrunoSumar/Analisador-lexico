@@ -555,10 +555,12 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "gramatica.l"
-#line 3 "gramatica.l"
+#line 2 "gramatica.l"
 #include "gramatica.tab.h"
-#line 561 "lex.yy.c"
-#line 562 "lex.yy.c"
+
+//extern YYTYPE yylval;
+#line 563 "lex.yy.c"
+#line 564 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -775,9 +777,9 @@ YY_DECL
 		}
 
 	{
-#line 7 "gramatica.l"
+#line 8 "gramatica.l"
 
-#line 781 "lex.yy.c"
+#line 783 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -846,217 +848,217 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 8 "gramatica.l"
+#line 9 "gramatica.l"
 {return PROGRAM;} 	//Palavra reservada
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 9 "gramatica.l"
+#line 10 "gramatica.l"
 {return PONTO_E_VIRGULA;} 	//ponto e virgula
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 10 "gramatica.l"
+#line 11 "gramatica.l"
 {return BEGIN_;} 	//Palavra reservada
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 11 "gramatica.l"
+#line 12 "gramatica.l"
 {return END;} 	//Palavra reservada
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 12 "gramatica.l"
+#line 13 "gramatica.l"
 {return CONST;} 	//Palavra reservada
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 13 "gramatica.l"
+#line 14 "gramatica.l"
 {return TYPE;} 	//Palavra reservada
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 14 "gramatica.l"
+#line 15 "gramatica.l"
 {return VAR;} 	//Palavra reservada
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 15 "gramatica.l"
+#line 16 "gramatica.l"
 {return CONST_STRING;} 	//String
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 16 "gramatica.l"
-{return NUMERO;} 	//Número
+#line 17 "gramatica.l"
+{yylval.fl = atof(yytext); return NUMERO;} 	//Número
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 17 "gramatica.l"
+#line 18 "gramatica.l"
 {return DOIS_PONTOS;} 	//Dois pontos
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 18 "gramatica.l"
+#line 19 "gramatica.l"
 {return INTEGER;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 19 "gramatica.l"
+#line 20 "gramatica.l"
 {return REAL;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 20 "gramatica.l"
+#line 21 "gramatica.l"
 {return ARRAY;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 21 "gramatica.l"
+#line 22 "gramatica.l"
 {return OF;} 	//Palavra reservada
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 22 "gramatica.l"
+#line 23 "gramatica.l"
 {return RECORD;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 23 "gramatica.l"
+#line 24 "gramatica.l"
 {return FUNCTION;} 	//Palavra reservada
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 24 "gramatica.l"
+#line 25 "gramatica.l"
 {return ATRIBUICAO;} 	//Atribuição
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 25 "gramatica.l"
+#line 26 "gramatica.l"
 {return WHILE;} 	//Palavra reservada
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 26 "gramatica.l"
+#line 27 "gramatica.l"
 {return IF;} 	//Palavra reservada
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 27 "gramatica.l"
+#line 28 "gramatica.l"
 {return THEN;} 	//Palavra reservada
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 28 "gramatica.l"
+#line 29 "gramatica.l"
 {return WRITE;} 	//Palavra reservada
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 29 "gramatica.l"
+#line 30 "gramatica.l"
 {return ELSE;} 	//Palavra reservada
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 30 "gramatica.l"
+#line 31 "gramatica.l"
 {return READ;}  //Palavra reservada
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 31 "gramatica.l"
+#line 32 "gramatica.l"
 {return ABRE_PARENTESES;} 	//Abre parenteses
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 32 "gramatica.l"
+#line 33 "gramatica.l"
 {return FECHA_PARENTESES;} 	//Fecha parenteses
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 33 "gramatica.l"
+#line 34 "gramatica.l"
 {return VIRGULA;} 	//Vírgula
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 34 "gramatica.l"
+#line 35 "gramatica.l"
 {return PONTO;} 	//Ponto
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 35 "gramatica.l"
+#line 36 "gramatica.l"
 {return ABRE_COLCHETES;} 	//Abre colchetes
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 36 "gramatica.l"
+#line 37 "gramatica.l"
 {return FECHA_COLCHETES;} 	//Fecha colchetes
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 37 "gramatica.l"
+#line 38 "gramatica.l"
 {return MAIOR_QUE;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 38 "gramatica.l"
+#line 39 "gramatica.l"
 {return MENOR_QUE;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 39 "gramatica.l"
+#line 40 "gramatica.l"
 {return IGUAL;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 40 "gramatica.l"
+#line 41 "gramatica.l"
 {return EXCLAMACAO;} 	//Operador lógico
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 41 "gramatica.l"
+#line 42 "gramatica.l"
 {return SOMA;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 42 "gramatica.l"
+#line 43 "gramatica.l"
 {return SUBTRACAO;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 43 "gramatica.l"
+#line 44 "gramatica.l"
 {return MULT;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 44 "gramatica.l"
+#line 45 "gramatica.l"
 {return BARRA;} 	//Operador matemático
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 45 "gramatica.l"
-{return IDENTIFICADOR;} 	//Identificador
+#line 46 "gramatica.l"
+{yylval.str = strdup(yytext);return IDENTIFICADOR;} 	//Identificador
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 47 "gramatica.l"
+#line 48 "gramatica.l"
 ;	//Comentario
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 48 "gramatica.l"
+#line 49 "gramatica.l"
 ;				//Espaço, tabulação e quebra de linha(ignorados)
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 49 "gramatica.l"
-{return ERRO;} 	//carácter inesperado
+#line 50 "gramatica.l"
+{printf("Erro lexico, linha: %d", yylineno); return ERRO;} 	//carácter inesperado
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 50 "gramatica.l"
+#line 51 "gramatica.l"
 ECHO;
 	YY_BREAK
-#line 1060 "lex.yy.c"
+#line 1062 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2073,7 +2075,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 50 "gramatica.l"
+#line 51 "gramatica.l"
 
 
 int yywrap(void)

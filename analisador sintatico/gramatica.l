@@ -1,6 +1,7 @@
-
 %{
 #include "gramatica.tab.h"
+
+//extern YYTYPE yylval;
 %}
 %option yylineno
 
@@ -13,15 +14,15 @@ const					{return CONST;} 	//Palavra reservada
 type					{return TYPE;} 	//Palavra reservada
 var						{return VAR;} 	//Palavra reservada
 \"[^\"\n]*\"			{return CONST_STRING;} 	//String
-[0-9]+([\.][0-9]*)?		{return NUMERO;} 	//Número
-:						{return DOIS_PONTOS;} 	//Dois pontos
+[0-9]+([\.][0-9]*)?		{yylval.fl = atof(yytext); return NUMERO;} 	//Número
+":"						{return DOIS_PONTOS;} 	//Dois pontos
 integer					{return INTEGER;} 	//Palavra reservada; tipo de dado
 real					{return REAL;} 	//Palavra reservada; tipo de dado
 array					{return ARRAY;} 	//Palavra reservada; tipo de dado
 of						{return OF;} 	//Palavra reservada
 record					{return RECORD;} 	//Palavra reservada; tipo de dado
 function				{return FUNCTION;} 	//Palavra reservada
-:=						{return ATRIBUICAO;} 	//Atribuição
+":="					{return ATRIBUICAO;} 	//Atribuição
 while					{return WHILE;} 	//Palavra reservada
 if						{return IF;} 	//Palavra reservada
 then					{return THEN;} 	//Palavra reservada
@@ -30,7 +31,7 @@ else					{return ELSE;} 	//Palavra reservada
 read                    {return READ;}  //Palavra reservada
 "("						{return ABRE_PARENTESES;} 	//Abre parenteses
 ")"						{return FECHA_PARENTESES;} 	//Fecha parenteses
-,						{return VIRGULA;} 	//Vírgula
+","						{return VIRGULA;} 	//Vírgula
 "."						{return PONTO;} 	//Ponto
 "["						{return ABRE_COLCHETES;} 	//Abre colchetes
 "]"						{return FECHA_COLCHETES;} 	//Fecha colchetes
@@ -42,11 +43,11 @@ read                    {return READ;}  //Palavra reservada
 "-"						{return SUBTRACAO;}
 "*"						{return MULT;}
 "/"						{return BARRA;} 	//Operador matemático
-[a-zA-Z]+[a-zA-Z0-9]*	{return IDENTIFICADOR;} 	//Identificador
+[a-zA-Z]+[a-zA-Z0-9]*	{yylval.str = strdup(yytext);return IDENTIFICADOR;} 	//Identificador
 
 "{"[^"}"]*"}"		  	;	//Comentario
-[ \t\n]				;				//Espaço, tabulação e quebra de linha(ignorados)
-.				{return ERRO;} 	//carácter inesperado
+[ \t\n]					;				//Espaço, tabulação e quebra de linha(ignorados)
+.						{printf("Erro lexico, linha: %d", yylineno); return ERRO;} 	//carácter inesperado
 %%
 
 int yywrap(void)
