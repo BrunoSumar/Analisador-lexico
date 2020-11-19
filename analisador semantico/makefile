@@ -4,7 +4,7 @@
 # @file
 # @version 0.1
 
-comp: gramatica.tab.c  lex.yy.c escopo.c
+comp: gramatica.tab.c  lex.yy.c
 	gcc -o saida $^
 
 gramatica.tab.c : gramatica.y

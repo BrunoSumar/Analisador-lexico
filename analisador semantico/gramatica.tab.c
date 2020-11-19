@@ -70,7 +70,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "escopo.h"
+#include <string.h>
 
 int yyerror();
 int yylex();
@@ -78,7 +78,8 @@ int yylex();
 extern int yylineno;
 extern int count;
 
-#line 82 "gramatica.tab.c"
+
+#line 83 "gramatica.tab.c"
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus
@@ -163,10 +164,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 13 "gramatica.y"
-char *str;double fl;
+#line 14 "gramatica.y"
+char *str;double fl;char* nome; char* tipo;
 
-#line 170 "gramatica.tab.c"
+#line 171 "gramatica.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -475,16 +476,16 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    62,    62,    63,    66,    67,    70,    71,    72,    75,
-      76,    77,    80,    81,    82,    85,    86,    87,    90,    91,
-      94,    95,    98,    99,   100,   103,   106,   107,   108,   111,
-     112,   115,   116,   117,   120,   121,   122,   125,   128,   129,
-     130,   133,   134,   135,   136,   137,   138,   141,   142,   143,
-     146,   147,   150,   151,   152,   155,   156,   157,   160,   161,
-     162,   165,   166,   167,   170,   171,   172,   173,   174,   175,
-     178,   179,   180,   183,   184,   187,   188,   191,   192,   193,
-     196,   197,   200,   201,   204,   205,   208,   209,   210,   211,
-     214,   215,   216,   217,   220,   221,   222,   223
+       0,    63,    63,    67,    70,    71,    74,    75,    76,    79,
+      80,    81,    84,    85,    86,    89,    90,    91,    94,    95,
+      98,    99,   102,   103,   104,   107,   110,   111,   112,   115,
+     119,   122,   123,   124,   127,   128,   129,   132,   138,   141,
+     145,   148,   149,   150,   151,   154,   157,   160,   161,   162,
+     165,   166,   169,   170,   171,   174,   175,   176,   179,   180,
+     181,   184,   185,   186,   189,   190,   191,   192,   193,   194,
+     197,   198,   199,   202,   203,   206,   207,   210,   211,   212,
+     215,   216,   219,   220,   223,   224,   227,   228,   229,   230,
+     233,   234,   235,   236,   239,   240,   241,   242
 };
 #endif
 
@@ -1391,8 +1392,61 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
+  case 2:
+#line 64 "gramatica.y"
+    {
+        printf("programa\n");
+}
+#line 1401 "gramatica.tab.c"
+    break;
 
-#line 1396 "gramatica.tab.c"
+  case 29:
+#line 116 "gramatica.y"
+    {
+        printf("tipo\n");
+}
+#line 1409 "gramatica.tab.c"
+    break;
+
+  case 37:
+#line 133 "gramatica.y"
+    {
+        //atribFilhoEsc(escAtual, escTemp);
+}
+#line 1417 "gramatica.tab.c"
+    break;
+
+  case 38:
+#line 139 "gramatica.y"
+    {
+}
+#line 1424 "gramatica.tab.c"
+    break;
+
+  case 39:
+#line 142 "gramatica.y"
+    {
+        printf("a");
+}
+#line 1432 "gramatica.tab.c"
+    break;
+
+  case 44:
+#line 152 "gramatica.y"
+    {
+}
+#line 1439 "gramatica.tab.c"
+    break;
+
+  case 45:
+#line 155 "gramatica.y"
+    {
+}
+#line 1446 "gramatica.tab.c"
+    break;
+
+
+#line 1450 "gramatica.tab.c"
 
       default: break;
     }
@@ -1624,7 +1678,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 226 "gramatica.y"
+#line 245 "gramatica.y"
 
 
 
@@ -1633,13 +1687,8 @@ int yyerror(char const *s){
         printf("\n>> Linha: %d %s\n", yylineno, s);
 }
 int count = 0;
-Escopo* raiz = NULL;
-Escopo* escAtual = NULL;
-Var* varAtual = NULL;
 
 int main (void) {
-        raiz = criaEscopo(NULL);
-        escAtual = raiz;
 
         yyparse();
        
@@ -1649,7 +1698,6 @@ int main (void) {
                 printf("\nNenhum erro econtrado.\n\n");
         }
 
-        apagaEscopo(raiz);
         return 0;
 }
 

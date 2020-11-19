@@ -899,17 +899,17 @@ YY_RULE_SETUP
 case 11:
 YY_RULE_SETUP
 #line 19 "gramatica.l"
-{return INTEGER;} 	//Palavra reservada; tipo de dado
+{yylval.tipo = strdup(yytext);return INTEGER;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 20 "gramatica.l"
-{return REAL;} 	//Palavra reservada; tipo de dado
+{yylval.tipo = strdup(yytext);return REAL;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 21 "gramatica.l"
-{return ARRAY;} 	//Palavra reservada; tipo de dado
+{yylval.tipo = strdup(yytext);return ARRAY;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
@@ -919,12 +919,12 @@ YY_RULE_SETUP
 case 15:
 YY_RULE_SETUP
 #line 23 "gramatica.l"
-{return RECORD;} 	//Palavra reservada; tipo de dado
+{yylval.tipo = strdup(yytext);return RECORD;} 	//Palavra reservada; tipo de dado
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 24 "gramatica.l"
-{return FUNCTION;} 	//Palavra reservada
+{yylval.tipo = strdup(yytext);return FUNCTION;} 	//Palavra reservada
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
@@ -1034,7 +1034,7 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 46 "gramatica.l"
-{yylval.str = strdup(yytext);return IDENTIFICADOR;} 	//Identificador
+{yylval.nome = strdup(yytext);return IDENTIFICADOR;} 	//Identificador
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */

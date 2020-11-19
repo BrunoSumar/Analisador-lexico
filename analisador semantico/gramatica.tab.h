@@ -95,8 +95,8 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 13 "gramatica.y"
-char *str;double fl;
+#line 14 "gramatica.y"
+char *str;double fl;char* nome; char* tipo;
 
 #line 102 "gramatica.tab.h"
 

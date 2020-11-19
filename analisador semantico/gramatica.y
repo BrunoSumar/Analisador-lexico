@@ -1,16 +1,17 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "escopo.h"
+#include <string.h>
 
 int yyerror();
 int yylex();
 
 extern int yylineno;
 extern int count;
+
 %}
 
-%union {char *str;double fl;char* nome, char* tipo}
+%union {char *str;double fl;char* nome; char* tipo;}
 %define parse.error verbose
 
 %token PROGRAM
@@ -59,7 +60,10 @@ extern int count;
 
 %%
 
-programa        : PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo  
+programa        : PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo
+{
+        printf("programa\n");
+}
                 | error PONTO_E_VIRGULA corpo  
                 ;
 
@@ -108,7 +112,10 @@ lista_tipos     : tipo PONTO_E_VIRGULA lista_tipos
                 | error PONTO_E_VIRGULA lista_tipos
                 ;
 
-tipo            : IDENTIFICADOR IGUAL tipo_dado           
+tipo            : IDENTIFICADOR IGUAL tipo_dado
+{
+        printf("tipo\n");
+}
                 | error  tipo_dado 
                 ;
 
@@ -122,19 +129,31 @@ lista_def_var   : variavel PONTO_E_VIRGULA lista_def_var
                 | error PONTO_E_VIRGULA
                 ;
 
-variavel        : lista_id DOIS_PONTOS tipo_dado          
+variavel        : lista_id DOIS_PONTOS tipo_dado
+{
+        //atribFilhoEsc(escAtual, escTemp);
+}
                 ;
 
-lista_id        : IDENTIFICADOR VIRGULA lista_id               
-                | IDENTIFICADOR                   
-                | error 
+lista_id        : IDENTIFICADOR VIRGULA lista_id
+{
+}
+                | IDENTIFICADOR
+{
+        printf("a");
+}
+                | error
                 ;
 
 tipo_dado       : INTEGER                       
                 | REAL                      
                 | ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado   
-                | RECORD lista_def_var END    /*  diferente da regra */ 
-                | IDENTIFICADOR                   
+                | RECORD lista_def_var END    /*  diferente da regra */
+{
+}
+                | IDENTIFICADOR
+{
+}
                 | error 
                 ;
 
@@ -231,12 +250,8 @@ int yyerror(char const *s){
         printf("\n>> Linha: %d %s\n", yylineno, s);
 }
 int count = 0;
-Escopo* escAtual = NULL;
-Escopo* escTemp = NULL;
-Var* varTemp = NULL;
 
 int main (void) {
-        escAtual = criaEscopo(NULL);
 
         yyparse();
        
@@ -246,7 +261,6 @@ int main (void) {
                 printf("\nNenhum erro econtrado.\n\n");
         }
 
-        apagaEscopo(raiz);
         return 0;
 }
 
