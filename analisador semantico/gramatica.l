@@ -1,5 +1,6 @@
 %{
 #include "gramatica.tab.h"
+#include "simbolos.h"
 
 //extern YYTYPE yylval;
 %}
@@ -20,8 +21,8 @@ integer					{yylval.tipo = strdup(yytext);return INTEGER;} 	//Palavra reservada;
 real					{yylval.tipo = strdup(yytext);return REAL;} 	//Palavra reservada; tipo de dado
 array					{yylval.tipo = strdup(yytext);return ARRAY;} 	//Palavra reservada; tipo de dado
 of						{return OF;} 	//Palavra reservada
-record					{yylval.tipo = strdup(yytext);return RECORD;} 	//Palavra reservada; tipo de dado
-function				{yylval.tipo = strdup(yytext);return FUNCTION;} 	//Palavra reservada
+record					{yylval.tipo = strdup(yytext);depth--;return RECORD;} 	//Palavra reservada; tipo de dado
+function				{yylval.tipo = strdup(yytext);depth--;return FUNCTION;} 	//Palavra reservada
 ":="					{return ATRIBUICAO;} 	//Atribuição
 while					{return WHILE;} 	//Palavra reservada
 if						{return IF;} 	//Palavra reservada

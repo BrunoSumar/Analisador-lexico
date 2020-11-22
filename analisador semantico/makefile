@@ -4,7 +4,7 @@
 # @file
 # @version 0.1
 
-comp: gramatica.tab.c  lex.yy.c
+comp: gramatica.tab.c  lex.yy.c simbolos.c
 	gcc -o saida $^
 
 gramatica.tab.c : gramatica.y
@@ -27,3 +27,4 @@ run :
 
 # - Só pode usar campo (.) em variaveis do tipo registro
 # - Só posso acessar campo de registro declarado
+#

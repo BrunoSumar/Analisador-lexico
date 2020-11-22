@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "simbolos.h"
 
 int yyerror();
 int yylex();
@@ -20,10 +21,10 @@ extern int count;
 %token CONST
 %token TYPE
 %token VAR
-%token INTEGER
-%token REAL
-%token ARRAY
-%token RECORD
+%token <tipo> INTEGER
+%token <tipo> REAL
+%token <tipo> ARRAY
+%token <tipo> RECORD
 %token OF
 %token FUNCTION
 %token WHILE
@@ -61,33 +62,36 @@ extern int count;
 %%
 
 programa        : PROGRAM IDENTIFICADOR PONTO_E_VIRGULA corpo
-{
-        printf("programa\n");
-}
-                | error PONTO_E_VIRGULA corpo  
+                | error PONTO_E_VIRGULA corpo
                 ;
 
 corpo           : declaracoes BEGIN_ lista_com END 
                 | error END
                 ;
 
-declaracoes     : def_const def_tipos def_var lista_func   
-                | error lista_func 
+declaracoes     : lista_def lista_func
+                | error lista_func
                 | /* epsilon */                            
                 ;
 
-def_const       : CONST lista_const               
-                | error   
+lista_def       : def_const def_tipos def_var
+{
+        atribEscopo("#global");
+}
+                ;
+
+def_const       : CONST lista_const
+                | error
                 | /* epsilon */                                       
                 ;
 
-def_tipos       : TYPE lista_tipos        
-                | error 
+def_tipos       : TYPE lista_tipos
+                | error
                 | /* epsilon */        
                 ;
 
 def_var         : VAR lista_def_var /*  diferente da regra */
-                | error 
+                | error
                 | /* epsilon */            
                 ;
 
@@ -95,16 +99,42 @@ lista_const     : constante lista_const
                 | constante             
                 ;
 
-constante       : IDENTIFICADOR IGUAL const_valor PONTO_E_VIRGULA   
+constante       : IDENTIFICADOR IGUAL const_valor PONTO_E_VIRGULA
+{
+        if(!procuraNome($1, escAtual()->nome)){
+                adicionaSimb(C_CONST, $1, tipo, escAtual()->nome, depth, -1);
+                strcpy(tipo, "");
+        }
+        else
+                erroSemantico(1);
+        //tipo = 0;
+}
                 | error PONTO_E_VIRGULA
                 ;
 
-const_valor     : CONST_STRING    
-                | exp_mat      
+const_valor     : CONST_STRING
+{
+        strcpy(tipo, "const_string");
+}
+                | exp_mat
                 | error 
                 ;
 
-numero          : NUMERO                          
+numero          : NUMERO
+{
+        int aux = $1;
+        if(aux-$1==0){
+                if(!strcmp(tipo,""))
+                        strcpy(tipo,"integer");
+                else if(strcmp(tipo, "integer") && strcmp(tipo, "real"))
+                                erroSemantico(3);
+        }else{
+                if(!strcmp(tipo,"")||!strcmp(tipo,"real")||!strcmp(tipo,"integer"))
+                                strcpy(tipo, "real");
+                else
+                        erroSemantico(3);
+        }
+}
                 ;
 
 lista_tipos     : tipo PONTO_E_VIRGULA lista_tipos
@@ -112,49 +142,87 @@ lista_tipos     : tipo PONTO_E_VIRGULA lista_tipos
                 | error PONTO_E_VIRGULA lista_tipos
                 ;
 
-tipo            : IDENTIFICADOR IGUAL tipo_dado
-{
-        printf("tipo\n");
-}
-                | error  tipo_dado 
+tipo            : id_tipo IGUAL tipo_dado
+                | error  tipo_dado
                 ;
 
-lista_var       : variavel PONTO_E_VIRGULA lista_var      
-                | variavel                                
+id_tipo         : IDENTIFICADOR
+{
+        if(!procuraNome($1, escAtual()->nome))
+                adicionaSimb(C_TYPE, $1, "", escAtual()->nome, depth, -1);
+        else
+                erroSemantico(1);
+}
+                ;
+
+lista_var       : variavel PONTO_E_VIRGULA lista_var
+                | variavel
                 | error PONTO_E_VIRGULA
                 ;
 
-lista_def_var   : variavel PONTO_E_VIRGULA lista_def_var      
+lista_def_var   : variavel PONTO_E_VIRGULA lista_def_var
                 | variavel PONTO_E_VIRGULA                                
                 | error PONTO_E_VIRGULA
                 ;
 
 variavel        : lista_id DOIS_PONTOS tipo_dado
-{
-        //atribFilhoEsc(escAtual, escTemp);
-}
                 ;
 
 lista_id        : IDENTIFICADOR VIRGULA lista_id
 {
+        if(!procuraNome($1, escAtual()->nome))
+                adicionaSimb(rec?C_FIELD:C_VAR, $1, "",escAtual()->nome,depth,!func?-1:++quantP);
+        else
+                erroSemantico(1);
 }
                 | IDENTIFICADOR
 {
-        printf("a");
+        if(!procuraNome($1, escAtual()->nome))
+                adicionaSimb(rec?C_FIELD:C_VAR, $1, "",escAtual()->nome,depth,!func?-1:++quantP);
+        else
+                erroSemantico(1);
 }
                 | error
                 ;
 
-tipo_dado       : INTEGER                       
-                | REAL                      
-                | ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado   
-                | RECORD lista_def_var END    /*  diferente da regra */
+tipo_dado       : INTEGER
 {
+        atribTipo($1);
+}
+                | REAL
+{
+        atribTipo($1);
+}
+                | ARRAY ABRE_COLCHETES numero FECHA_COLCHETES OF tipo_dado
+{
+        tabSim[ind-1].qt = 0;
+        atribTipo(yylval.tipo);
+}
+                | record lista_def_var END    /*  diferente da regra */
+{
+        rec--;
+        depth++;
+        atribTipo("record");
+        pilha = popEscopo();
 }
                 | IDENTIFICADOR
 {
+        Simbolo* temp = procuraNome($1, escAtual()->nome);
+        if(temp && temp->class==C_TYPE)
+                atribTipo($1);
+        else{
+                erroSemantico(2);
+                atribTipo("#erro");
+        }
 }
                 | error 
+                ;
+
+record          : RECORD
+{
+        rec++;
+        pilha = adicionaEscopoFim(tabSim[ind-1].nome);
+}
                 ;
 
 lista_func      : funcao lista_func          
@@ -162,13 +230,60 @@ lista_func      : funcao lista_func
                 | error 
                 ;
 
-funcao          : nome_funcao bloco_funcao        
+funcao          : nome_funcao bloco_funcao
+{
+        atribEscopo(escAtual()->nome);
+        pilha = popEscopo();
+}
                 | error 
                 ;
 
-nome_funcao     : FUNCTION IDENTIFICADOR ABRE_PARENTESES lista_var FECHA_PARENTESES DOIS_PONTOS tipo_dado   
-                | FUNCTION IDENTIFICADOR ABRE_PARENTESES FECHA_PARENTESES DOIS_PONTOS tipo_dado   
+nome_funcao     : escopo_funcao ABRE_PARENTESES lista_var FECHA_PARENTESES dp_funcao tipo_funcao
+{
+        depth--;
+        atribQt(quantP);
+        quantP = -1;
+        func--;
+        depth++;
+        depth++;
+}
+                | escopo_funcao ABRE_PARENTESES FECHA_PARENTESES dp_funcao tipo_funcao
+{
+        depth--;
+        atribQt(0);
+        quantP = -1;
+        func--;
+        depth++;
+        depth++;
+}
                 | error 
+                ;
+
+escopo_funcao   : FUNCTION IDENTIFICADOR
+{
+        quantP = 0;
+        func++;
+        if(!procuraNome($2, escAtual()->nome)){
+                depth--;
+                adicionaSimb(C_FUNC,$2,"",escAtual()->nome,depth, -1);
+                depth++;
+                pilha = adicionaEscopoFim($2);
+        }else
+                erroSemantico(1);
+}
+                ;
+
+dp_funcao         : DOIS_PONTOS
+{
+        depth--;
+}
+                ;
+
+
+tipo_funcao     : tipo_dado
+{
+        depth++;
+}
                 ;
 
 bloco_funcao    : def_var bloco             
@@ -177,7 +292,10 @@ bloco_funcao    : def_var bloco
                 ;
 
 bloco           : BEGIN_ lista_com END          
-                | comando                     
+                | comando
+{
+        strcpy(tipo, "");
+}
                 | error 
                 ;
 
@@ -186,12 +304,23 @@ lista_com       : comando PONTO_E_VIRGULA lista_com
                 | error 
                 ;
 
-comando         : nome ATRIBUICAO valor                    
-                | WHILE  exp_logica bloco                  
-                | IF exp_logica THEN bloco else              
-                | WRITE const_valor                   
-                | READ nome                              
-                | error 
+comando         : nome ATRIBUICAO valor
+{
+        if(!strcmp(tipo,"#erro"))
+                erroSematico(3);
+}
+
+                | WHILE  condicao bloco
+                | IF exp_logica THEN bloco else
+                | WRITE const_valor
+                | READ nome
+                | error
+                ;
+
+condicao        : exp_logica
+{
+        strcpy(tipo, "");
+}
                 ;
 
  else           : ELSE bloco                        
@@ -200,28 +329,64 @@ comando         : nome ATRIBUICAO valor
                 ;
 
 valor           : exp_mat                                  
-                | IDENTIFICADOR lista_param                   
+                | id_func lista_param
+{
+        Simbolo* temp = procuraNome(fAux->nome, escAtual()->nome);
+        if(!temp)
+                erroSemantico(6);
+        if(temp && quantP!=temp->qt)
+                erroSemantico(8);
+        fAux = popEsc(fAux);
+        func--;
+        quantP = -1;
+}
+                ;
+
+id_func         : IDENTIFICADOR
+{
+        Simbolo* temp = procuraNome($1, escAtual()->nome);
+        if(temp && temp->class==C_FUNC){
+                fAux = pushEsc(fAux, $1);
+                quantP=0;
+        }else
+                erroSemantico(6);
+        func++;
+}
                 ;
 
 lista_param     : ABRE_PARENTESES lista_nome FECHA_PARENTESES   
                 | error FECHA_PARENTESES
                 ;
 
-lista_nome      : parametro VIRGULA lista_nome      
-                | parametro                                      
+lista_nome      : func_par VIRGULA lista_nome
+                | func_par
                 | /*  epsilon */                                 
                 ;
 
+func_par        : nome
+{
+        quantP++;
+        verificaPar();
+        strcpy(tipo,"");
+}
+                | numero
+{
+        quantP++;
+        verificaPar();
+        strcpy(tipo,"");
+}
+                ;
+
 exp_logica      : exp_mat op_logico exp_logica                
-                | exp_mat                                      
+                | exp_mat
                 ;
 
 exp_mat         : parametro op_mat exp_mat                      
                 | parametro                                     
                 ;
 
-parametro       : nome                                          
-                | numero                                        
+parametro       : nome
+                | numero
                 ;
 
 op_logico       : MAIOR_QUE                   
@@ -236,11 +401,52 @@ op_mat          : SOMA
                 | BARRA                       
                 ;
 
-nome            : IDENTIFICADOR                                            
-                | IDENTIFICADOR PONTO nome                                 
-                | IDENTIFICADOR ABRE_COLCHETES parametro FECHA_COLCHETES   
-                | error            
+nome            : IDENTIFICADOR
+{
+        validaTipo($1, 1);
+        strcpy(recNome, "");
+}
+                | id_record nome
+                | id_array parametro FECHA_COLCHETES
+{
+        strcpy(tipo,id);
+}
+                | error
                 ;
+
+id_record       : IDENTIFICADOR PONTO
+{
+        Simbolo* temp;
+        if(!strcmp(recNome, "")){
+                 temp = procuraNome($1, escAtual()->nome);
+                 temp = converteTipo(temp);
+                 if(temp && !strcmp(temp->tipo, "record"))
+                         strcpy(recNome, $1);
+                 else{
+                         strcpy(tipo,"#erro");
+                         erroSemantico(5);
+                 }
+        }else{
+                 temp = procuraCampo($1);
+                 temp = converteTipo(temp);
+                 if(temp && !strcmp(temp->tipo, "record"))
+                         strcpy(recNome, $1);
+                 else{
+                         strcpy(tipo,"#erro");
+                         erroSemantico(5);
+                 }
+        }
+}
+                ;
+
+id_array        : IDENTIFICADOR ABRE_COLCHETES
+{
+        validaTipo($1, 0);
+        strcpy(id,tipo);
+        strcpy(tipo, "integer");
+}
+                ;
+
 
 %%
 
@@ -252,14 +458,11 @@ int yyerror(char const *s){
 int count = 0;
 
 int main (void) {
+        initTab();
 
         yyparse();
-       
-        if(count > 0){
-                printf("\nErros sintaticos encontrados: %d \n\n", count);
-        }else{
-                printf("\nNenhum erro econtrado.\n\n");
-        }
+
+        printf("\n\nFim da análise");
 
         return 0;
 }
