@@ -1,0 +1,234 @@
+LBL    	funcoes       	program      	
+ORI    	$t1       	$zero      	10
+OR    	$t0       	$zero      	$t1
+LBL    	TAM       	const      	
+Sw    	t$1       	$zero      	TAM
+LBL    	vetor       	type      	
+LBL    	aluno       	type      	
+LBL    	nota1       	field      	4
+LBL    	nota2       	field      	0
+LBL    	D       	var      	
+LBL    	C       	var      	
+LBL    	B       	var      	
+LBL    	A       	var      	
+LBL    	E       	var      	
+LBL    	F       	var      	
+LBL    	fatorial       	      	
+SW    	$link       	$zero      	$stack
+ADD    	$stack       	$stack      	4
+LBL    	1a       	var      	
+SW    	$p1       	$zero      	1a
+LBL    	1result       	var      	
+LBL    	1i       	var      	
+OR    	$t4       	$zero      	$zero
+ORI    	$t1       	$zero      	1
+OR    	$t0       	$zero      	$t1
+OR    	1i       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ORI    	$t1       	$zero      	3
+OR    	$t0       	$zero      	$t1
+OR    	E       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ORI    	$t1       	$zero      	1
+OR    	$t0       	$zero      	$t1
+OR    	1result       	$zero      	$t0
+LBL    	#lbl0       	      	
+ADD    	$t4       	$zero      	1i
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$zero      	1a
+LW    	$t1       	$zero      	$t4
+SGT    	$t0       	$t0      	$t1
+OR    	$t4       	$zero      	$t0
+OR    	$t4       	$zero      	$t0
+BEQ    	#lbl1       	$zero      	$t4
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	1result
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$zero      	1i
+LW    	$t1       	$zero      	$t4
+MULT    	$t0       	$t0      	$t1
+OR    	1result       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	1i
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ORI    	$t1       	$zero      	1
+ADD    	$t0       	$t0      	$t1
+OR    	1i       	$zero      	$t0
+J    	#lbl0       	      	
+LBL    	#lbl1       	      	
+SUB    	$stack       	$tack      	fatorial
+LW    	$t0       	$zero      	$stack
+JR    	$t0       	      	
+LBL    	exp       	      	
+SW    	$link       	$zero      	$stack
+ADD    	$stack       	$stack      	4
+LBL    	2a       	var      	
+SW    	$p1       	$zero      	2a
+LBL    	2b       	var      	
+SW    	$p2       	$zero      	2b
+LBL    	2i       	var      	
+LBL    	2result       	var      	
+OR    	$t4       	$zero      	$zero
+ORI    	$t1       	$zero      	1
+OR    	$t0       	$zero      	$t1
+OR    	2i       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	2a
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+OR    	2result       	$zero      	$t0
+ADD    	$t4       	$zero      	2b
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ORI    	$t1       	$zero      	0
+NOR    	$t0       	$t0      	$t1
+OR    	$t4       	$zero      	$t0
+OR    	$t4       	$zero      	$t0
+BEQ    	#lbl2       	$zero      	$t4
+OR    	$t4       	$zero      	$zero
+ORI    	$t1       	$zero      	1
+OR    	$t0       	$zero      	$t1
+OR    	2result       	$zero      	$t0
+LBL    	#lbl4       	      	
+ADD    	$t4       	$zero      	2i
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$zero      	2b
+LW    	$t1       	$zero      	$t4
+SGT    	$t0       	$t0      	$t1
+OR    	$t4       	$zero      	$t0
+OR    	$t4       	$zero      	$t0
+BEQ    	#lbl5       	$zero      	$t4
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	2a
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$zero      	2a
+LW    	$t1       	$zero      	$t4
+MULT    	$t0       	$t0      	$t1
+OR    	2result       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	2i
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ORI    	$t1       	$zero      	1
+ADD    	$t0       	$t0      	$t1
+OR    	2i       	$zero      	$t0
+J    	#lbl4       	      	
+LBL    	#lbl5       	      	
+J    	#lbl3       	      	
+LBL    	#lbl2       	      	
+LBL    	#lbl3       	      	
+SUB    	$stack       	$tack      	exp
+LW    	$t0       	$zero      	$stack
+JR    	$t0       	      	
+LBL    	lerDados       	      	
+SW    	$link       	$zero      	$stack
+ADD    	$stack       	$stack      	4
+LBL    	3result       	var      	
+ORI    	$s       	$zero      	1
+ORI    	$io       	$zero      	"digite as notas do aluno"
+syscall    	       	      	
+ADD    	$t4       	$t4      	3result
+ADD    	$t4       	$zero      	3nota1
+LW    	$t1       	$zero      	$t4
+ORI    	$s       	$zero      	0
+syscall    	       	      	
+OR    	3nota1       	$zero      	$io
+ADD    	$t4       	$t4      	3result
+ADD    	$t4       	$zero      	3nota2
+LW    	$t1       	$zero      	$t4
+ORI    	$s       	$zero      	0
+syscall    	       	      	
+OR    	3nota2       	$zero      	$io
+SUB    	$stack       	$tack      	lerDados
+LW    	$t0       	$zero      	$stack
+JR    	$t0       	      	
+LBL    	maior       	      	
+SW    	$link       	$zero      	$stack
+ADD    	$stack       	$stack      	4
+LBL    	4a       	var      	
+SW    	$p1       	$zero      	4a
+LBL    	4i       	var      	
+LBL    	4result       	var      	
+OR    	$t4       	$zero      	$zero
+ORI    	$t1       	$zero      	0
+OR    	$t0       	$zero      	$t1
+OR    	4i       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ORI    	$t1       	$zero      	0
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$t4      	4a
+OR    	$t0       	$zero      	$t1
+OR    	4result       	$zero      	$t0
+LBL    	#lbl6       	      	
+ADD    	$t4       	$zero      	4i
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ORI    	$t1       	$zero      	15
+SGT    	$t0       	$t0      	$t1
+OR    	$t4       	$zero      	$t0
+OR    	$t4       	$zero      	$t0
+BEQ    	#lbl7       	$zero      	$t4
+ADD    	$t4       	$zero      	4i
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$t4      	4a
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$zero      	4result
+LW    	$t1       	$zero      	$t4
+SLT    	$t0       	$t0      	$t1
+OR    	$t4       	$zero      	$t0
+OR    	$t4       	$zero      	$t0
+BEQ    	#lbl8       	$zero      	$t4
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	4i
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+ADD    	$t4       	$t4      	4a
+OR    	$t0       	$zero      	$t1
+OR    	4result       	$zero      	$t0
+J    	#lbl9       	      	
+LBL    	#lbl8       	      	
+LBL    	#lbl9       	      	
+J    	#lbl6       	      	
+LBL    	#lbl7       	      	
+SUB    	$stack       	$tack      	maior
+LW    	$t0       	$zero      	$stack
+JR    	$t0       	      	
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	TAM
+LW    	$t1       	$zero      	$t4
+OR    	$t0       	$zero      	$t1
+OR    	A       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	A
+LW    	$t1       	$zero      	$t4
+OR    	$p1       	$zero      	$t1
+JAL    	fatorial       	      	
+OR    	$t0       	$zero      	$r
+OR    	B       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	A
+LW    	$t1       	$zero      	$t4
+ADD    	$t4       	$zero      	B
+LW    	$t1       	$zero      	$t4
+OR    	$p2       	$zero      	$t1
+OR    	$p2       	$zero      	$t1
+JAL    	exp       	      	
+OR    	$t0       	$zero      	$r
+OR    	C       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+ADD    	$t4       	$zero      	E
+LW    	$t1       	$zero      	$t4
+OR    	$p1       	$zero      	$t1
+JAL    	maior       	      	
+OR    	$t0       	$zero      	$r
+OR    	D       	$zero      	$t0
+OR    	$t4       	$zero      	$zero
+JAL    	lerDados       	      	
+OR    	$t0       	$zero      	$r
+OR    	F       	$zero      	$t0
